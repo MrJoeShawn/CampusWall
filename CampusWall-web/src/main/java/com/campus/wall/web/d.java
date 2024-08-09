@@ -1,2 +1,4 @@
-package com.campus.wall.web;public class d {
+package com.campus.wall.web;
+
+public class d {
 }

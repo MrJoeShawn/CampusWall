@@ -1,13 +1,13 @@
 package com.campus.wall.dao.entity;
- import java.util.Date;
- import java.io.Serializable;
 
- import com.campus.wall.dao.enums.Gender;
- import lombok.AllArgsConstructor;
- import lombok.Data;
- import lombok.NoArgsConstructor;
- import com.baomidou.mybatisplus.annotation.TableId;
- import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.campus.wall.dao.enums.Gender;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Date;
  /**
  * 用户表(Users)表实体类
  *
