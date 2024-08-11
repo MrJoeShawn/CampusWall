@@ -1,7 +1,7 @@
 package com.campus.wall.web.controller;
 
-import com.campus.wall.dao.entity.Users;
-import com.campus.wall.service.UsersService;
+import com.campus.framework.dao.entity.Users;
+import com.campus.framework.service.UsersService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
