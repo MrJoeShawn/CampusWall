@@ -4,6 +4,7 @@ import com.campus.framework.dao.enums.AppHttpCodeEnum;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.io.Serializable;
+
 /**
  * 响应结果泛型类，用于统一API接口返回格式
  * 实现了Serializable接口，表示该类对象可以被序列化
@@ -13,6 +14,8 @@ import java.io.Serializable;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseResult<T> implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     // 响应状态码
     private Integer code;
     // 响应消息
@@ -24,8 +27,7 @@ public class ResponseResult<T> implements Serializable {
      * 默认构造函数，初始化为成功状态
      */
     public ResponseResult() {
-        this.code = AppHttpCodeEnum.SUCCESS.getCode();
-        this.msg = AppHttpCodeEnum.SUCCESS.getMsg();
+        this(AppHttpCodeEnum.SUCCESS.getCode(), AppHttpCodeEnum.SUCCESS.getMsg(), null);
     }
 
     /**
@@ -35,8 +37,7 @@ public class ResponseResult<T> implements Serializable {
      * @param data 响应数据
      */
     public ResponseResult(Integer code, T data) {
-        this.code = code;
-        this.data = data;
+        this(code, null, data);
     }
 
     /**
@@ -53,26 +54,14 @@ public class ResponseResult<T> implements Serializable {
     }
 
     /**
-     * 带状态码和消息的构造函数
-     *
-     * @param code 响应状态码
-     * @param msg  响应消息
-     */
-    public ResponseResult(Integer code, String msg) {
-        this.code = code;
-        this.msg = msg;
-    }
-
-    /**
      * 构建错误结果的静态方法
      *
      * @param code 状态码
      * @param msg  消息
      * @return 构建的错误结果对象
      */
-    public static ResponseResult errorResult(int code, String msg) {
-        ResponseResult result = new ResponseResult();
-        return result.error(code, msg);
+    public static <T> ResponseResult<T> errorResult(int code, String msg) {
+        return new ResponseResult<>(code, msg, null);
     }
 
     /**
@@ -80,21 +69,18 @@ public class ResponseResult<T> implements Serializable {
      *
      * @return 构建的成功结果对象
      */
-    public static ResponseResult okResult() {
-        ResponseResult result = new ResponseResult();
-        return result;
+    public static <T> ResponseResult<T> okResult() {
+        return new ResponseResult<>();
     }
 
     /**
      * 构建带消息的成功结果的静态方法
      *
-     * @param code 状态码
-     * @param msg  消息
+     * @param msg 消息
      * @return 构建的成功结果对象
      */
-    public static ResponseResult okResult(int code, String msg) {
-        ResponseResult result = new ResponseResult();
-        return result.ok(code, null, msg);
+    public static <T> ResponseResult<T> okResult(String msg) {
+        return new ResponseResult<>(AppHttpCodeEnum.SUCCESS.getCode(), msg, null);
     }
 
     /**
@@ -103,14 +89,15 @@ public class ResponseResult<T> implements Serializable {
      * @param data 数据
      * @return 构建的成功结果对象
      */
-    public static ResponseResult okResult(Object data) {
-        ResponseResult result = setAppHttpCodeEnum(AppHttpCodeEnum.SUCCESS,
-                AppHttpCodeEnum.SUCCESS.getMsg());
-        if (data != null) {
-            result.setData(data);
-        }
-        return result;
+    public static <T> ResponseResult<T> okResult(T data) {
+        return new ResponseResult<>(AppHttpCodeEnum.SUCCESS.getCode(), AppHttpCodeEnum.SUCCESS.getMsg(), data);
     }
+
+
+    public static <T> ResponseResult<T> okResult(T data, String msg) {
+        return new ResponseResult<>(AppHttpCodeEnum.SUCCESS.getCode(), msg, data);
+    }
+
 
     /**
      * 构建错误结果的静态方法，使用枚举类型定义错误信息
@@ -118,8 +105,8 @@ public class ResponseResult<T> implements Serializable {
      * @param enums 枚举类型错误信息
      * @return 构建的错误结果对象
      */
-    public static ResponseResult errorResult(AppHttpCodeEnum enums) {
-        return setAppHttpCodeEnum(enums, enums.getMsg());
+    public static <T> ResponseResult<T> errorResult(AppHttpCodeEnum enums) {
+        return errorResult(enums.getCode(), enums.getMsg());
     }
 
     /**
@@ -129,134 +116,32 @@ public class ResponseResult<T> implements Serializable {
      * @param msg   自定义错误消息
      * @return 构建的错误结果对象
      */
-    public static ResponseResult errorResult(AppHttpCodeEnum enums, String msg) {
-        return setAppHttpCodeEnum(enums, msg);
+    public static <T> ResponseResult<T> errorResult(AppHttpCodeEnum enums, String msg) {
+        return errorResult(enums.getCode(), msg);
     }
 
-    /**
-     * 设置AppHttpCodeEnum的静态辅助方法，用于统一设置响应状态码和消息
-     *
-     * @param enums 枚举类型错误信息
-     * @return 构建的响应结果对象
-     */
-    public static ResponseResult setAppHttpCodeEnum(AppHttpCodeEnum enums) {
-        return okResult(enums.getCode(), enums.getMsg());
-    }
+    // Getter 和 Setter 方法
 
-    /**
-     * 设置AppHttpCodeEnum和自定义消息的静态辅助方法
-     *
-     * @param enums 枚举类型错误信息
-     * @param msg   自定义消息
-     * @return 构建的响应结果对象
-     */
-    private static ResponseResult setAppHttpCodeEnum(AppHttpCodeEnum enums,
-                                                     String msg) {
-        return okResult(enums.getCode(), msg);
-    }
-
-    /**
-     * 设置错误状态的辅助方法
-     *
-     * @param code 状态码
-     * @param msg  消息
-     * @return 当前对象，支持链式调用
-     */
-    public ResponseResult<?> error(Integer code, String msg) {
-        this.code = code;
-        this.msg = msg;
-        return this;
-    }
-
-    /**
-     * 设置成功状态和数据的辅助方法
-     *
-     * @param code 状态码
-     * @param data 响应数据
-     * @return 当前对象，支持链式调用
-     */
-    public ResponseResult<?> ok(Integer code, T data) {
-        this.code = code;
-        this.data = data;
-        return this;
-    }
-
-    /**
-     * 设置成功状态、数据和消息的辅助方法
-     *
-     * @param code 状态码
-     * @param data 响应数据
-     * @param msg  消息
-     * @return 当前对象，支持链式调用
-     */
-    public ResponseResult<?> ok(Integer code, T data, String msg) {
-        this.code = code;
-        this.data = data;
-        this.msg = msg;
-        return this;
-    }
-
-    /**
-     * 设置成功状态和数据的辅助方法，使用默认成功状态码
-     *
-     * @param data 响应数据
-     * @return 当前对象，支持链式调用
-     */
-    public ResponseResult<?> ok(T data) {
-        this.data = data;
-        return this;
-    }
-
-    /**
-     * 获取响应状态码
-     *
-     * @return 响应状态码
-     */
     public Integer getCode() {
         return code;
     }
 
-    /**
-     * 设置响应状态码
-     *
-     * @param code 响应状态码
-     */
     public void setCode(Integer code) {
         this.code = code;
     }
 
-    /**
-     * 获取响应消息
-     *
-     * @return 响应消息
-     */
     public String getMsg() {
         return msg;
     }
 
-    /**
-     * 设置响应消息
-     *
-     * @param msg 响应消息
-     */
     public void setMsg(String msg) {
         this.msg = msg;
     }
 
-    /**
-     * 获取响应数据
-     *
-     * @return 响应数据
-     */
     public T getData() {
         return data;
     }
 
-    /**
-     * 设置响应数据
-     *
-     * @param data 响应数据
-     */
     public void setData(T data) {
         this.data = data;
     }

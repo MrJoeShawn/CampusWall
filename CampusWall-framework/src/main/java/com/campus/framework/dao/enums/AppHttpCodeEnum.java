@@ -6,37 +6,45 @@ package com.campus.framework.dao.enums;
  */
 public enum AppHttpCodeEnum {
     // 成功
-    SUCCESS(200,"操作成功"),
+    SUCCESS(200, "操作成功"),
     // 登录
-    NEED_LOGIN(401,"需要登录后操作"),
+    NEED_LOGIN(401, "需要登录后操作"),
     // 权限
-    NO_OPERATOR_AUTH(403,"无权限操作"),
+    NO_OPERATOR_AUTH(403, "无权限操作"),
     // 服务器错误
-    SYSTEM_ERROR(500,"出现错误"),
+    SYSTEM_ERROR(500, "出现错误"),
     // 用户名已存在
-    USERNAME_EXIST(501,"用户名已存在"),
+    USERNAME_EXIST(601, "用户名已存在"),
     // 手机号已存在
-    PHONENUMBER_EXIST(502,"手机号已存在"),
+    PHONENUMBER_EXIST(602, "手机号已存在"),
     // 邮箱已存在
-    EMAIL_EXIST(503, "邮箱已存在"),
+    EMAIL_EXIST(603, "邮箱已存在"),
     // 需要用户名
-    REQUIRE_USERNAME(504, "必需填写用户名"),
+    REQUIRE_USERNAME(604, "必需填写用户名"),
+    // 文件类型错误
+    FILE_TYPE_ERROR(605, "文件类型错误,请上传png或者jpg文件"),
     // 登录错误
-    LOGIN_ERROR(505,"用户名或密码错误");
+    LOGIN_ERROR(606, "用户名或密码错误"),
+    // 图片格式无效
+    INVALID_IMAGE_FORMAT(607, "无效的图片格式，请上传PNG或JPG文件"),
+    // 文件上传失败
+    UPLOAD_FAILED(608, "文件上传失败"),
+    // 用户头像更新失败
+    UPDATE_FAILED(609, "用户头像更新失败");
 
     // 状态码
-    int code;
+    private final int code;
     // 错误消息
-    String msg;
+    private final String msg;
 
     /**
      * 构造函数，初始化状态码和错误消息
      * @param code 状态码
-     * @param errorMessage 错误消息描述
+     * @param msg 错误消息描述
      */
-    AppHttpCodeEnum(int code, String errorMessage){
+    AppHttpCodeEnum(int code, String msg) {
         this.code = code;
-        this.msg = errorMessage;
+        this.msg = msg;
     }
 
     /**
@@ -55,4 +63,3 @@ public enum AppHttpCodeEnum {
         return msg;
     }
 }
-

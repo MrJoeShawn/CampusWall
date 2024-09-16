@@ -13,8 +13,6 @@ public class UserInfoVo {
     private Integer id;
     //用户名
     private String username;
-    //密码（加密后）
-    private String password;
     //电子邮件
     private String email;
     //电话号码

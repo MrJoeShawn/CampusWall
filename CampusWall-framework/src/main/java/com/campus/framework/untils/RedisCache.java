@@ -235,4 +235,26 @@ public class RedisCache
     {
         return redisTemplate.keys(pattern);
     }
+
+    /**
+     * 检查哈希键是否存在
+     *
+     * @param key Redis 键
+     * @param hKey 哈希键
+     * @return true 如果哈希键存在
+     */
+    public boolean isHashKeyExists(final String key, final String hKey) {
+        return redisTemplate.opsForHash().hasKey(key, hKey);
+    }
+
+    /**
+     * 判断 Redis 中是否存在某个键
+     *
+     * @param key Redis 键
+     * @return true 如果键存在
+     */
+    public boolean hasKey(final String key) {
+        return redisTemplate.hasKey(key);
+    }
+
 }

@@ -34,3 +34,8 @@ springfox:
 knife4j:
   # 开启增强
   enable: true
+
+oss:
+  accessKey: jWoUFwaUESo2Pg1d9JG4x5JP9iVmiyMJxj9LYy4H
+  secretKey: ycm6cnrCu35aTOCUZmQ4tT0YAfBiVrXbL6TXRFHe
+  bucket: xj-campus-wall

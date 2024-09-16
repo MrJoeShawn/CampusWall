@@ -8,14 +8,16 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+/**
+ * Web相关的工具类
+ */
 public class WebUtils
 {
     /**
      * 将字符串渲染到客户端
-     * 
+     *
      * @param response 渲染对象
      * @param string 待渲染的字符串
-     * @return null
      */
     public static void renderString(HttpServletResponse response, String string) {
         try
@@ -31,7 +33,14 @@ public class WebUtils
         }
     }
 
-
+    /**
+     * 设置文件下载的响应头
+     *
+     * @param filename 文件名
+     * @param context Servlet上下文
+     * @param response 响应对象
+     * @throws UnsupportedEncodingException 当URL编码不被支持时抛出此异常
+     */
     public static void setDownLoadHeader(String filename, ServletContext context, HttpServletResponse response) throws UnsupportedEncodingException {
         String mimeType = context.getMimeType(filename);//获取文件的mime类型
         response.setHeader("content-type",mimeType);
