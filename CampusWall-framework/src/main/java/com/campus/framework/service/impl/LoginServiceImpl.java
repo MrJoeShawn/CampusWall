@@ -30,22 +30,23 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public ResponseResult login(Users users) {
+        // 创建包含用户名和密码的认证令牌
         UsernamePasswordAuthenticationToken authenticationToken = new
                 UsernamePasswordAuthenticationToken(users.getUsername(),users.getPassword());
+        // 使用认证管理器进行用户认证
         Authentication authenticate =
                 authenticationManager.authenticate(authenticationToken);
         //判断是否认证通过
         if(Objects.isNull(authenticate)){
             throw new RuntimeException("用户名或密码错误");
         }
-        //获取userid 生成token
+        // 获取用户ID并生成会话令牌
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
         String userId = loginUser.getUsers().getId().toString();
         String jwt = JwtUtil.createJWT(userId);
-        //把用户信息存入redis
+        // 把用户信息存入Redis缓存
         redisCache.setCacheObject("login:"+userId,loginUser);
-        //把token和userinfo封装 返回
-        //把User转换成UserInfoVo
+        // 把令牌和用户信息封装并返回
         UserInfoVo userInfoVo = BeanCopyUtils.copyBean(loginUser.getUsers(),
                 UserInfoVo.class);
         UserLoginVo vo = new UserLoginVo(jwt,userInfoVo);
@@ -54,13 +55,14 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public ResponseResult logout() {
-        //获取token 解析获取userid
+        // 从Security上下文中获取当前认证信息
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
+        // 获取当前登录用户信息
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
-        //获取userid
+        // 获取用户ID
         Long userId = Long.valueOf(loginUser.getUsers().getId());
-        //删除redis中的用户信息
+        // 删除Redis中存储的当前用户信息
         redisCache.deleteObject("login:"+userId);
         return ResponseResult.okResult();
     }

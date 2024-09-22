@@ -29,8 +29,11 @@ public enum AppHttpCodeEnum {
     INVALID_IMAGE_FORMAT(607, "无效的图片格式，请上传PNG或JPG文件"),
     // 文件上传失败
     UPLOAD_FAILED(608, "文件上传失败"),
+    // 用户不存在
+    USER_NOT_FOUND(610, "用户不存在"),
     // 用户头像更新失败
     UPDATE_FAILED(609, "用户头像更新失败");
+
 
     // 状态码
     private final int code;

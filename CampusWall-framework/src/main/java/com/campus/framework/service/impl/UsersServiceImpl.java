@@ -14,38 +14,76 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements UsersService {
     private final UsersMapper usersMapper;
+    private final RedisCache redisCache;
+    private final HttpServletRequest request;
+
+    private static final Logger log = LoggerFactory.getLogger(UsersServiceImpl.class);
 
     @Autowired
-    private RedisCache redisCache;
-
-    @Autowired
-    private HttpServletRequest request;
-
-    public UsersServiceImpl(UsersMapper usersMapper) {
+    public UsersServiceImpl(UsersMapper usersMapper, RedisCache redisCache, HttpServletRequest request) {
         this.usersMapper = usersMapper;
+        this.redisCache = redisCache;
+        this.request = request;
     }
 
-    @Override
-    public ResponseResult updateUserInfo(Users users) {
-        //TODO 使用 DTO（数据传输对象）隔离可修改字段
-            return null;
-
+@Override
+public ResponseResult updateUserInfo(Users users) {
+    try {
+        System.out.println(users);
+        Integer userId = SecurityUtils.getUserId();
+        Users updateUser = usersMapper.selectById(userId);
+        if (updateUser == null) {
+            log.warn("用户ID {} 不存在", userId);
+            return ResponseResult.errorResult(AppHttpCodeEnum.USER_NOT_FOUND);
         }
+
+
+        // 直接使用updateUser对象来设置新的信息
+        updateUser.setFullName(users.getFullName());
+        updateUser.setGender(users.getGender());
+        updateUser.setBirthdate(users.getBirthdate());
+        updateUser.setAddress(users.getAddress());
+        updateUser.setMajor(users.getMajor());
+        updateUser.setEmail(users.getEmail());
+        updateUser.setPhoneNumber(users.getPhoneNumber());
+        updateUser.setSchool(users.getSchool());
+
+        // 更新数据库中的用户信息
+        usersMapper.updateById(updateUser);
+
+        return ResponseResult.okResult();
+    } catch (Exception e) {
+        log.error("更新用户信息失败", e);
+        return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR, "更新用户信息失败");
+    }
+}
+
 
     @Override
     public ResponseResult getUserInfo() {
-        Integer userId = SecurityUtils.getUserId();
-        Users user = usersMapper.selectById(userId);
+        try {
+            Integer userId = SecurityUtils.getUserId();
+            Users user = usersMapper.selectById(userId);
 
-        if (user == null) {
-            return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR, "用户不存在");
+            if (user == null) {
+                log.warn("用户ID {} 不存在", userId);
+                return ResponseResult.errorResult(AppHttpCodeEnum.USER_NOT_FOUND);
+            }
+
+            // 转换为 VO 对象，返回用户信息
+            UserInfoVo userInfoVo = BeanCopyUtils.copyBean(user, UserInfoVo.class);
+            return ResponseResult.okResult(userInfoVo);
+        } catch (Exception e) {
+            log.error("获取用户信息失败", e);
+            return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR, "获取用户信息失败");
         }
-
-        // 转换为 VO 对象，返回用户信息
-        UserInfoVo userInfoVo = BeanCopyUtils.copyBean(user, UserInfoVo.class);
-        return ResponseResult.okResult(userInfoVo);
     }
 }
