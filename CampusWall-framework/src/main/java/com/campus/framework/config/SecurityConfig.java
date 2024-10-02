@@ -67,6 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/upload").authenticated()
                 .antMatchers("/uploadUserHeaderImg").authenticated()
                 .antMatchers("/userInfo").authenticated()
+                .antMatchers("/creatrdynamic").authenticated()
         // 除上面外的所有请求全部不需要认证即可访问
         .anyRequest().authenticated();
         //注销接口需要认证才能访问

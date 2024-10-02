@@ -21,7 +21,6 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public ResponseResult handleException(Exception e) {
-        log.error("出现了异常！", e);  // 输出详细异常堆栈
-        return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR, "系统异常，请联系管理员");
+        return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR, e.getMessage());
     }
 }
