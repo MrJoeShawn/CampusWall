@@ -5,5 +5,9 @@ import com.campus.framework.dao.entity.Dynamic;
 import com.campus.framework.dao.repository.ResponseResult;
 
 public interface DynamicService extends IService<Dynamic> {
-    ResponseResult getDynamicList();
+    ResponseResult getDynamicList(Integer pageNum,Integer pageSize);
+
+    ResponseResult getDynamicListByCategoryId(Integer pageNum, Integer pageSize, Long categoryId);
+
+    ResponseResult getDynamicById(Long id);
 }
