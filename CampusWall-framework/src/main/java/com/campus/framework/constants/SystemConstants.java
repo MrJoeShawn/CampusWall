@@ -14,4 +14,9 @@ public class SystemConstants {
      *  文章分类是正常状态
      */
     public static final int CLASSIFICATION_NORMAL = 1;
+
+    /**
+     *  评论是否为根评论
+     */
+    public static final int COMMENT_ISROOT = -1;
 }

@@ -34,39 +34,48 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
         this.request = request;
     }
 
-@Override
-public ResponseResult updateUserInfo(Users users) {
-    try {
-        System.out.println(users);
-        Integer userId = SecurityUtils.getUserId();
-        Users updateUser = usersMapper.selectById(userId);
-        if (updateUser == null) {
-            log.warn("用户ID {} 不存在", userId);
-            return ResponseResult.errorResult(AppHttpCodeEnum.USER_NOT_FOUND);
+    /**
+     * 更新用户信息
+     * @param users
+     * @return
+     */
+    @Override
+    public ResponseResult updateUserInfo(Users users) {
+        try {
+            System.out.println(users);
+            Integer userId = SecurityUtils.getUserId();
+            Users updateUser = usersMapper.selectById(userId);
+            if (updateUser == null) {
+                log.warn("用户ID {} 不存在", userId);
+                return ResponseResult.errorResult(AppHttpCodeEnum.USER_NOT_FOUND);
+            }
+
+
+            // 直接使用updateUser对象来设置新的信息
+            updateUser.setFullName(users.getFullName());
+            updateUser.setGender(users.getGender());
+            updateUser.setBirthdate(users.getBirthdate());
+            updateUser.setAddress(users.getAddress());
+            updateUser.setMajor(users.getMajor());
+            updateUser.setEmail(users.getEmail());
+            updateUser.setPhoneNumber(users.getPhoneNumber());
+            updateUser.setSchool(users.getSchool());
+
+            // 更新数据库中的用户信息
+            usersMapper.updateById(updateUser);
+
+            return ResponseResult.okResult();
+        } catch (Exception e) {
+            log.error("更新用户信息失败", e);
+            return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR, "更新用户信息失败");
         }
-
-
-        // 直接使用updateUser对象来设置新的信息
-        updateUser.setFullName(users.getFullName());
-        updateUser.setGender(users.getGender());
-        updateUser.setBirthdate(users.getBirthdate());
-        updateUser.setAddress(users.getAddress());
-        updateUser.setMajor(users.getMajor());
-        updateUser.setEmail(users.getEmail());
-        updateUser.setPhoneNumber(users.getPhoneNumber());
-        updateUser.setSchool(users.getSchool());
-
-        // 更新数据库中的用户信息
-        usersMapper.updateById(updateUser);
-
-        return ResponseResult.okResult();
-    } catch (Exception e) {
-        log.error("更新用户信息失败", e);
-        return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR, "更新用户信息失败");
     }
-}
 
 
+    /**
+     * 获取用户信息
+     * @return
+     */
     @Override
     public ResponseResult getUserInfo() {
         try {

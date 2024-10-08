@@ -14,6 +14,10 @@ public class DynamicCategoriesController {
     @Autowired
     private DynamicCategoriesService dynamicCategoriesService;
 
+    /**
+     * 获取动态分类列表
+     * @return
+     */
     @GetMapping("/getCategoryList")
     public ResponseResult getCategoryList() {
         return dynamicCategoriesService.getCategoryList();

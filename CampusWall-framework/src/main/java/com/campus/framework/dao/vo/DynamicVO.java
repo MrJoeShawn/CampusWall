@@ -11,6 +11,8 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DynamicVO {
+    //评论ID
+    private Integer commentId;
     //动态ID
     private Integer dynamicId;
     //发布用户ID

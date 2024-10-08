@@ -1,6 +1,9 @@
 package com.campus.framework.dao.entity;
  import java.util.Date;
  import java.io.Serializable;
+
+ import com.baomidou.mybatisplus.annotation.FieldFill;
+ import com.baomidou.mybatisplus.annotation.TableField;
  import lombok.AllArgsConstructor;
  import lombok.Data;
  import lombok.NoArgsConstructor;
@@ -47,8 +50,15 @@ package com.campus.framework.dao.entity;
      private Integer likeCount;
      //评论次数
      private Integer commentCount;
+     @TableField(fill = FieldFill.INSERT)
+     private Long createdBy;
+     //更新人
+     @TableField(fill = FieldFill.INSERT_UPDATE)
+     private Long updatedBy;
      //创建时间
+     @TableField(fill = FieldFill.INSERT)
      private Date createdAt;
      //更新时间
+     @TableField(fill = FieldFill.INSERT_UPDATE)
      private Date updatedAt;
  }
