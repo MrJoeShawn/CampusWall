@@ -324,7 +324,7 @@
                     <option name="custom" value="false" />
                     <option name="ext" value="{}" />
                     <option name="name" value="id" />
-                    <option name="type" value="java.lang.Integer" />
+                    <option name="type" value="java.lang.Long" />
                   </ColumnInfoDTO>
                   <ColumnInfoDTO>
                     <option name="comment" value="用户名" />
@@ -464,8 +464,8 @@
               <option name="name" value="Users" />
               <option name="preName" value="" />
               <option name="saveModelName" value="CampusWall-framework" />
-              <option name="savePackageName" value="com.campus.wall.dao" />
-              <option name="savePath" value="./CampusWall-framework/src/main/java/com/campus/wall/dao" />
+              <option name="savePackageName" value="com.campus.framework.dao" />
+              <option name="savePath" value="./CampusWall-framework/src/main/java/com/campus/framework/dao" />
               <option name="templateGroupName" value="MybatisPlus" />
             </TableInfoDTO>
           </value>

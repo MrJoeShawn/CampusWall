@@ -68,12 +68,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/uploadUserHeaderImg").authenticated()
                 .antMatchers("/userInfo").authenticated()
                 .antMatchers("/creatrdynamic").authenticated()
-        // 除上面外的所有请求全部不需要认证即可访问
-        .anyRequest().authenticated();
+        .anyRequest().permitAll();
         //注销接口需要认证才能访问
-//        // 对于登录接口 允许匿名访问
 //        .antMatchers("/doc.html#/**","/login","/swagger-ui.html", "/webjars/**", "/v2/**", "/swagger-resources/**").anonymous()
-//        // 除上面外的所有请求全部不需要认证即可访问
 //        .anyRequest().permitAll();
         //配置异常处理器
         http.exceptionHandling()

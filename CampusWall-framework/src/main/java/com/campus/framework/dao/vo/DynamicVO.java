@@ -37,4 +37,6 @@ public class DynamicVO {
     private Integer commentCount;
     //创建时间
     private Date createdAt;
+    //全名
+    private String fullName;
 }

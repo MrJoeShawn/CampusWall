@@ -37,6 +37,6 @@ public class CommentVo {
     private String userAvatar;
     //创建时间
     private Date createdAt;
-    // 子评论
+    //子评论
     private List<CommentVo> replies;
 }
