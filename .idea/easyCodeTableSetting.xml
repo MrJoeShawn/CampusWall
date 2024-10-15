@@ -313,6 +313,68 @@
             </TableInfoDTO>
           </value>
         </entry>
+        <entry key="campus_wall.dynamic_tags">
+          <value>
+            <TableInfoDTO>
+              <option name="comment" value="动态标签关联表" />
+              <option name="fullColumn">
+                <list>
+                  <ColumnInfoDTO>
+                    <option name="comment" value="动态ID" />
+                    <option name="custom" value="false" />
+                    <option name="ext" value="{}" />
+                    <option name="name" value="dynamicId" />
+                    <option name="type" value="java.lang.Long" />
+                  </ColumnInfoDTO>
+                  <ColumnInfoDTO>
+                    <option name="comment" value="标签ID" />
+                    <option name="custom" value="false" />
+                    <option name="ext" value="{}" />
+                    <option name="name" value="tagId" />
+                    <option name="type" value="java.lang.Long" />
+                  </ColumnInfoDTO>
+                </list>
+              </option>
+              <option name="name" value="DynamicTags" />
+              <option name="preName" value="" />
+              <option name="saveModelName" value="CampusWall-framework" />
+              <option name="savePackageName" value="com.campus.framework" />
+              <option name="savePath" value="./CampusWall-framework/src/main/java/com/campus/framework" />
+              <option name="templateGroupName" value="MybatisPlus" />
+            </TableInfoDTO>
+          </value>
+        </entry>
+        <entry key="campus_wall.tags">
+          <value>
+            <TableInfoDTO>
+              <option name="comment" value="动态标签表" />
+              <option name="fullColumn">
+                <list>
+                  <ColumnInfoDTO>
+                    <option name="comment" value="标签ID" />
+                    <option name="custom" value="false" />
+                    <option name="ext" value="{}" />
+                    <option name="name" value="tagId" />
+                    <option name="type" value="java.lang.Long" />
+                  </ColumnInfoDTO>
+                  <ColumnInfoDTO>
+                    <option name="comment" value="标签名称" />
+                    <option name="custom" value="false" />
+                    <option name="ext" value="{}" />
+                    <option name="name" value="tagName" />
+                    <option name="type" value="java.lang.String" />
+                  </ColumnInfoDTO>
+                </list>
+              </option>
+              <option name="name" value="Tags" />
+              <option name="preName" value="" />
+              <option name="saveModelName" value="CampusWall-framework" />
+              <option name="savePackageName" value="com.campus.framework" />
+              <option name="savePath" value="./CampusWall-framework/src/main/java/com/campus/framework" />
+              <option name="templateGroupName" value="MybatisPlus" />
+            </TableInfoDTO>
+          </value>
+        </entry>
         <entry key="campus_wall.users">
           <value>
             <TableInfoDTO>

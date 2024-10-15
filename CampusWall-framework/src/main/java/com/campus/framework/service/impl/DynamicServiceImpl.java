@@ -5,15 +5,21 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.campus.framework.constants.SystemConstants;
 import com.campus.framework.dao.entity.Dynamic;
+import com.campus.framework.dao.entity.DynamicTags;
+import com.campus.framework.dao.entity.Tags;
 import com.campus.framework.dao.entity.Users;
 import com.campus.framework.dao.mapper.DynamicMapper;
 import com.campus.framework.dao.repository.ResponseResult;
 import com.campus.framework.dao.vo.DynamicListVO;
 import com.campus.framework.dao.vo.DynamicVO;
 import com.campus.framework.dao.vo.PageVo;
+import com.campus.framework.dao.vo.UserInfoVo;
 import com.campus.framework.service.DynamicService;
+import com.campus.framework.service.DynamicTagsService;
+import com.campus.framework.service.TagsService;
 import com.campus.framework.service.UsersService;
 import com.campus.framework.untils.BeanCopyUtils;
+import javafx.scene.control.Tab;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +31,12 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
 
     @Autowired
     UsersService usersService;
+
+    @Autowired
+    TagsService tagsService;
+
+    @Autowired
+    DynamicTagsService dynamicTagsService;
 
     /**
      * 首页获取动态列表
@@ -106,6 +118,33 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
         Users user = usersService.getById(dynamic.getUserId());
         DynamicVO dynamicVO = BeanCopyUtils.copyBean(dynamic, DynamicVO.class);
         dynamicVO.setFullName(user.getFullName());
+        LambdaQueryWrapper<DynamicTags> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(DynamicTags::getDynamicId, dynamic.getDynamicId());
+        List<DynamicTags> tags = dynamicTagsService.list(queryWrapper);
+        List<Tags> tagList = tags.stream()
+                .map(dynamicTags -> tagsService.getById(dynamicTags.getTagId()))
+                .collect(Collectors.toList());
+        dynamicVO.setTagName(tagList);
         return ResponseResult.okResult(dynamicVO);
+    }
+
+    /**
+     * 根据动态获取对应动态的用户信息
+     * @param dynamicId
+     * @return
+     */
+    @Override
+    public ResponseResult getUserByDynamicId(Integer dynamicId) {
+        Dynamic dynamic = getById(dynamicId);
+        Users user = usersService.getById(dynamic.getUserId());
+        UserInfoVo userInfoVo = BeanCopyUtils.copyBean(user, UserInfoVo.class);
+        LambdaQueryWrapper<Dynamic> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Dynamic::getUserId, user.getId());
+        queryWrapper.orderByDesc(Dynamic::getLikeCount);
+        queryWrapper.last("LIMIT 3");
+        List<Dynamic> dynamics = list(queryWrapper);
+        List<DynamicListVO> dynamicListVOS = BeanCopyUtils.copyBeanList(dynamics, DynamicListVO.class);
+        userInfoVo.setHotDynamic(dynamicListVOS);
+        return ResponseResult.okResult(userInfoVo);
     }
 }

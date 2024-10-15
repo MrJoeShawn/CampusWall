@@ -42,4 +42,9 @@ public class DynamicController {
         return dynamicService.getDynamicById(id);
     }
 
+
+    @GetMapping("/user/{id}")
+    public ResponseResult getUserByDynamicId(@PathVariable("id") Integer dynamicId) {
+        return dynamicService.getUserByDynamicId(dynamicId);
+    }
 }

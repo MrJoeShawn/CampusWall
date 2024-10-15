@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -39,4 +40,6 @@ public class DynamicVO {
     private Date createdAt;
     //全名
     private String fullName;
+    //标签名称
+    private List tagName;
 }

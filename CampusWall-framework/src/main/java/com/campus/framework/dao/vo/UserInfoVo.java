@@ -1,10 +1,12 @@
 package com.campus.framework.dao.vo;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.campus.framework.dao.enums.Gender;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Accessors(chain = true)
@@ -31,4 +33,6 @@ public class UserInfoVo {
     private String school;
     //专业
     private String major;
+    //热门动态
+    private List hotDynamic;
 }
