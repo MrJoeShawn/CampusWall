@@ -9,7 +9,6 @@ import com.campus.framework.service.UploadService;
 import com.campus.framework.untils.PathUtils;
 import com.campus.framework.untils.RedisCache;
 import com.campus.framework.untils.SecurityUtils;
-import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
 import com.qiniu.storage.Configuration;
 import com.qiniu.storage.Region;

@@ -19,4 +19,9 @@ public class SystemConstants {
      *  评论是否为根评论
      */
     public static final int COMMENT_ISROOT = -1;
+
+    /**
+     * 文章是否置顶
+     */
+    public static final int ARTICLE_STATUS_TOP=1;
 }

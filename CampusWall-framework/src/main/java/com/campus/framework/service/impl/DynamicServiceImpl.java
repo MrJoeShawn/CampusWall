@@ -10,16 +10,13 @@ import com.campus.framework.dao.entity.Tags;
 import com.campus.framework.dao.entity.Users;
 import com.campus.framework.dao.mapper.DynamicMapper;
 import com.campus.framework.dao.repository.ResponseResult;
-import com.campus.framework.dao.vo.DynamicListVO;
-import com.campus.framework.dao.vo.DynamicVO;
-import com.campus.framework.dao.vo.PageVo;
-import com.campus.framework.dao.vo.UserInfoVo;
+import com.campus.framework.dao.vo.*;
 import com.campus.framework.service.DynamicService;
 import com.campus.framework.service.DynamicTagsService;
 import com.campus.framework.service.TagsService;
 import com.campus.framework.service.UsersService;
 import com.campus.framework.untils.BeanCopyUtils;
-import javafx.scene.control.Tab;
+import com.campus.framework.untils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -147,4 +144,36 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
         userInfoVo.setHotDynamic(dynamicListVOS);
         return ResponseResult.okResult(userInfoVo);
     }
+
+
+    /**
+     * 根据用户id获取动态列表  用户主页动态
+     * @return
+     */
+    @Override
+    public ResponseResult getDynamicListByUserId(Integer pageNum, Integer pageSize, Integer userId) {
+        PageVo pageVo = getPageVo(pageNum, pageSize, userId);
+        return ResponseResult.okResult(pageVo);
+    }
+
+    /**
+     * 封装分页数据
+     * @param pageNum
+     * @param pageSize
+     * @param userId
+     * @return
+     */
+    private PageVo getPageVo(Integer pageNum, Integer pageSize, Integer userId) {
+        LambdaQueryWrapper <Dynamic> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Dynamic::getUserId, userId);
+        queryWrapper.eq(Dynamic::getIsDeleted, SystemConstants.ARTICLE_STATUS_DRAFT);
+        queryWrapper.orderByDesc(Dynamic::getCreatedAt);
+        Page<Dynamic> page = new Page<>(pageNum, pageSize);
+        page(page, queryWrapper);
+        List<UserDynamicListVO> userDynamicListVOS = BeanCopyUtils.copyBeanList(page.getRecords(), UserDynamicListVO.class);
+        PageVo pageVo = new PageVo(userDynamicListVOS, page.getTotal());
+        return pageVo;
+    }
+
+
 }

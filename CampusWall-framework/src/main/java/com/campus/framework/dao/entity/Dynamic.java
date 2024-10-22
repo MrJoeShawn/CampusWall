@@ -44,6 +44,8 @@ package com.campus.framework.dao.entity;
      private Integer isDraft;
      //是否已删除 “0”否 “1”是 默认为否
      private Integer isDeleted;
+     //是否置顶
+     private Integer isTop;
      //浏览次数
      private Integer viewCount;
      //点赞次数

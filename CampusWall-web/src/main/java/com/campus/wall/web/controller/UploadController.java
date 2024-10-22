@@ -16,6 +16,11 @@ public class UploadController {
     private UploadService uploadService;
 
 
+    /**
+     * 用户修改头像
+     * @param imgName
+     * @return
+     */
     @PostMapping("/uploadUserHeaderImg")
     public ResponseResult uploadHeaderImg(@RequestParam("imgName") MultipartFile imgName) {
         return uploadService.uploadHeaderImg(imgName);

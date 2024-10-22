@@ -12,4 +12,6 @@ public interface DynamicService extends IService<Dynamic> {
     ResponseResult getDynamicById(Long id);
 
     ResponseResult getUserByDynamicId(Integer dynamicId);
+
+    ResponseResult getDynamicListByUserId(Integer pageNum, Integer pageSize, Integer userId);
 }
