@@ -30,6 +30,6 @@ public class UserDynamicListVO {
     private Integer isDraft;
     //是否置顶 (0: 不是置顶, 1: 是置顶)
     private Integer isTop;
-    //置顶动态
+    //动态
     private List<Dynamic> TopDynamic;
 }

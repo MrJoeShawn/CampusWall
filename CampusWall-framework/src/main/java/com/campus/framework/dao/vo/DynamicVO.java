@@ -20,6 +20,8 @@ public class DynamicVO {
     private Integer userId;
     //动态摘要
     private String dynamicSummary;
+    //动态封面URL
+    private String dynamicCover;
     //动态内容，包含富文本和HTML标签
     private String dynamicContent;
     //清理后的动态内容，使用DOMPurify确保安全

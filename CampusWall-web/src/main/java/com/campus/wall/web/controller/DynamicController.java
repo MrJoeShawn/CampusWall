@@ -47,8 +47,7 @@ public class DynamicController {
     public ResponseResult getDynamicById(@PathVariable("id") Long id) {
         return dynamicService.getDynamicById(id);
     }
-
-
+    
     /**
      * 根据动态id获取用户信息
      * @param dynamicId
@@ -76,5 +75,20 @@ public class DynamicController {
     @GetMapping("/users/{userId}/dynamics")
     public ResponseResult getUserDynamics(@PathVariable Integer userId, Integer pageNum, Integer pageSize) {
         return dynamicService.getDynamicListByUserId(pageNum, pageSize, userId);
+    }
+
+    /**
+     * 获取置顶动态 用户点击自己主页
+     * @return
+     */
+    @GetMapping("/topdynamics")
+    public ResponseResult getTopDynamics() {
+        Integer userId = SecurityUtils.getUserId();
+        return dynamicService.getDynamicTop(userId);
+    }
+
+    @GetMapping("/topdynamics/{userId}")
+    public ResponseResult getTopDynamicsByUserId(@PathVariable Integer userId) {
+        return dynamicService.getDynamicTop(userId);
     }
 }

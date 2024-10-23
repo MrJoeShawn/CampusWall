@@ -157,6 +157,20 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
     }
 
     /**
+     * 获取置顶动态 用户点击自己主页
+     * @return
+     */
+    @Override
+    public ResponseResult getDynamicTop(Integer userId) {
+        LambdaQueryWrapper<Dynamic> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Dynamic::getUserId, userId);
+        queryWrapper.eq(Dynamic::getIsTop, SystemConstants.ARTICLE_STATUS_TOP);
+        Dynamic dynamic = getOne(queryWrapper);
+        DynamicVO DynamicVO = BeanCopyUtils.copyBean(dynamic, DynamicVO.class);
+        return ResponseResult.okResult(DynamicVO);
+    }
+
+    /**
      * 封装分页数据
      * @param pageNum
      * @param pageSize
