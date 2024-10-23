@@ -1,5 +1,7 @@
 package com.campus.framework.constants;
 
+import com.campus.framework.dao.enums.AppHttpCodeEnum;
+
 public class SystemConstants {
     /**
      *  文章是草稿
@@ -24,4 +26,6 @@ public class SystemConstants {
      * 文章是否置顶
      */
     public static final int ARTICLE_STATUS_TOP=1;
+
+
 }

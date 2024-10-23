@@ -1,6 +1,7 @@
 package com.campus.framework.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.campus.framework.constants.SystemConstants;
@@ -8,6 +9,7 @@ import com.campus.framework.dao.entity.Dynamic;
 import com.campus.framework.dao.entity.DynamicTags;
 import com.campus.framework.dao.entity.Tags;
 import com.campus.framework.dao.entity.Users;
+import com.campus.framework.dao.enums.AppHttpCodeEnum;
 import com.campus.framework.dao.mapper.DynamicMapper;
 import com.campus.framework.dao.repository.ResponseResult;
 import com.campus.framework.dao.vo.*;
@@ -169,6 +171,50 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
         DynamicVO DynamicVO = BeanCopyUtils.copyBean(dynamic, DynamicVO.class);
         return ResponseResult.okResult(DynamicVO);
     }
+
+    /**
+     * 更新置顶动态
+     * @param dynamicId
+     * @return
+     */
+    @Override
+    public ResponseResult updateTopDynamics(Integer dynamicId) {
+          // 从token中获取用户id
+          Integer userId = SecurityUtils.getUserId();
+
+          // 检查用户ID是否有效
+          if (userId == null) {
+              return ResponseResult.errorResult(AppHttpCodeEnum.INVALID_USER_ID);
+          }
+
+          // 查询当前要置顶的动态
+          Dynamic newDynamic = getById(dynamicId);
+          if (newDynamic == null) {
+              return ResponseResult.errorResult(AppHttpCodeEnum.DYNAMIC_NOT_FOUND);
+          }
+
+          // 查询该用户是否有置顶动态
+          QueryWrapper queryWrapper = new QueryWrapper<>();
+          queryWrapper.eq("is_top", SystemConstants.ARTICLE_STATUS_TOP);
+          queryWrapper.eq("user_id", userId);
+          Dynamic dynamic = getOne(queryWrapper);
+
+          // 如果不为空置顶动态则先将原本置顶动态修改为未置顶
+          if (dynamic != null) {
+              dynamic.setIsTop(SystemConstants.ARTICLE_STATUS_NORMAL);
+              updateById(dynamic); // 更新数据库
+          }
+
+          // 将新的动态设置为置顶
+          newDynamic.setIsTop(SystemConstants.ARTICLE_STATUS_TOP);
+          updateById(newDynamic); // 更新数据库
+
+
+          DynamicVO newDynamicVO = BeanCopyUtils.copyBean(newDynamic, DynamicVO.class);
+          // 返回结果
+          return ResponseResult.okResult(newDynamicVO);
+  }
+
 
     /**
      * 封装分页数据

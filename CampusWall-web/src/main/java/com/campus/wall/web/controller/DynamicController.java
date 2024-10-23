@@ -4,10 +4,7 @@ import com.campus.framework.dao.repository.ResponseResult;
 import com.campus.framework.service.DynamicService;
 import com.campus.framework.untils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/dynamic")
@@ -47,7 +44,7 @@ public class DynamicController {
     public ResponseResult getDynamicById(@PathVariable("id") Long id) {
         return dynamicService.getDynamicById(id);
     }
-    
+
     /**
      * 根据动态id获取用户信息
      * @param dynamicId
@@ -87,8 +84,24 @@ public class DynamicController {
         return dynamicService.getDynamicTop(userId);
     }
 
+    /**
+     * 获取置顶动态 用户点击其他用户主页
+     * @return
+     */
     @GetMapping("/topdynamics/{userId}")
     public ResponseResult getTopDynamicsByUserId(@PathVariable Integer userId) {
         return dynamicService.getDynamicTop(userId);
     }
+
+    /**
+     * 设置置顶动态
+     * @param dynamicId
+     * @return
+     */
+    @PutMapping("/topdynamics")
+    public ResponseResult updateTopDynamics(@RequestParam Integer dynamicId) {
+        System.out.println("dynamicId = " + dynamicId);
+        return dynamicService.updateTopDynamics(dynamicId);
+    }
+
 }

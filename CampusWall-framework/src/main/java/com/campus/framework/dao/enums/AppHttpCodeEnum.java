@@ -32,7 +32,11 @@ public enum AppHttpCodeEnum {
     // 用户不存在
     USER_NOT_FOUND(610, "用户不存在"),
     // 用户头像更新失败
-    UPDATE_FAILED(609, "用户头像更新失败");
+    UPDATE_FAILED(609, "用户头像更新失败"),
+    // 无效的用户ID
+    INVALID_USER_ID(611, "无效的用户ID"),
+    // 动态不存在
+    DYNAMIC_NOT_FOUND(612, "动态不存在");
 
 
     // 状态码
