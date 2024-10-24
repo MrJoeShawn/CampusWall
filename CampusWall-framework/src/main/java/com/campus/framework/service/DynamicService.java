@@ -18,4 +18,6 @@ public interface DynamicService extends IService<Dynamic> {
     ResponseResult getDynamicTop(Integer userId);
 
     ResponseResult updateTopDynamics(Integer dynamicId);
+
+    ResponseResult getUserInfoByUserId(Integer userId);
 }

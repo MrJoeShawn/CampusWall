@@ -129,22 +129,53 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
 
     /**
      * 根据动态获取对应动态的用户信息
-     * @param dynamicId
-     * @return
+     * @param dynamicId 动态ID
+     * @return 用户信息响应结果
      */
     @Override
     public ResponseResult getUserByDynamicId(Integer dynamicId) {
+        // 根据动态ID获取动态信息
         Dynamic dynamic = getById(dynamicId);
+        // 根据动态中的用户ID获取用户信息
         Users user = usersService.getById(dynamic.getUserId());
+        UserInfoVo userInfoVo = getUserInfoVo(user);
+        // 返回用户信息响应结果
+        return ResponseResult.okResult(userInfoVo);
+    }
+
+    /**
+     * 根据用户ID获取用户信息 用户主页展示用户信息
+     * @param userId 用户ID
+     * @return 用户信息响应结果
+     */
+    @Override
+    public ResponseResult getUserInfoByUserId(Integer userId) {
+        Users user = usersService.getById(userId);
+        UserInfoVo userInfoVo = getUserInfoVo(user);
+        // 返回用户信息响应结果
+        return ResponseResult.okResult(userInfoVo);
+    }
+
+    /**
+     * 获取用户信息视图对象
+     * @param user 用户对象
+     * @return 用户信息视图对象
+     */
+    private UserInfoVo getUserInfoVo(Users user) {
+        // 将用户信息转换为用户信息视图对象
         UserInfoVo userInfoVo = BeanCopyUtils.copyBean(user, UserInfoVo.class);
+        // 创建查询条件，查询同一用户的动态，并按点赞数降序排序，限制结果数量为3
         LambdaQueryWrapper<Dynamic> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Dynamic::getUserId, user.getId());
         queryWrapper.orderByDesc(Dynamic::getLikeCount);
         queryWrapper.last("LIMIT 3");
+        // 执行查询，获取动态列表
         List<Dynamic> dynamics = list(queryWrapper);
+        // 将动态列表转换为动态列表视图对象
         List<DynamicListVO> dynamicListVOS = BeanCopyUtils.copyBeanList(dynamics, DynamicListVO.class);
+        // 将热门动态列表设置到用户信息视图对象中
         userInfoVo.setHotDynamic(dynamicListVOS);
-        return ResponseResult.okResult(userInfoVo);
+        return userInfoVo;
     }
 
 
@@ -167,9 +198,15 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
         LambdaQueryWrapper<Dynamic> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Dynamic::getUserId, userId);
         queryWrapper.eq(Dynamic::getIsTop, SystemConstants.ARTICLE_STATUS_TOP);
+
         Dynamic dynamic = getOne(queryWrapper);
-        DynamicVO DynamicVO = BeanCopyUtils.copyBean(dynamic, DynamicVO.class);
-        return ResponseResult.okResult(DynamicVO);
+
+        if (dynamic == null) {
+            return ResponseResult.okResult("没有找到置顶动态", null);
+        }
+
+        DynamicVO dynamicVO = BeanCopyUtils.copyBean(dynamic, DynamicVO.class);
+        return ResponseResult.okResult(dynamicVO);
     }
 
     /**

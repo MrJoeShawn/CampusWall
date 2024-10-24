@@ -56,6 +56,16 @@ public class DynamicController {
     }
 
     /**
+     * 用户主页展示用户信息
+     * @param userId
+     * @return
+     */
+    @GetMapping("/HomepageUserInfo/{id}")
+    public ResponseResult getUserInfoByUserId(@PathVariable("id") Integer userId){
+        return dynamicService.getUserInfoByUserId(userId);
+    }
+
+    /**
      * 根据用户id获取动态列表 个人主页动态 从token中获取用户id
      * @return
      */
@@ -64,6 +74,7 @@ public class DynamicController {
         Integer userId = SecurityUtils.getUserId();
         return dynamicService.getDynamicListByUserId(pageNum, pageSize,userId);
     }
+
 
     /**
      * 根据用户id获取动态列表 用户主页动态 作品页面获取用户动态列表
