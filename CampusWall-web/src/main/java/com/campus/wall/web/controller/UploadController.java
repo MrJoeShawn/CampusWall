@@ -23,6 +23,7 @@ public class UploadController {
      */
     @PostMapping("/uploadUserHeaderImg")
     public ResponseResult uploadHeaderImg(@RequestParam("imgName") MultipartFile imgName) {
+        System.out.println("imgName:" + imgName);
         return uploadService.uploadHeaderImg(imgName);
     }
 }

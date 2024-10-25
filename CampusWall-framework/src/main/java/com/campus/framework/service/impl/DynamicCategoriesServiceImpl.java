@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.campus.framework.constants.SystemConstants;
 import com.campus.framework.dao.entity.Dynamic;
+import com.campus.framework.dao.entity.DynamicTags;
+import com.campus.framework.dao.mapper.DynamicTagsMapper;
 import com.campus.framework.dao.repository.ResponseResult;
 import com.campus.framework.dao.vo.DynamicCategoriesVo;
 import com.campus.framework.service.DynamicCategoriesService;
@@ -31,6 +33,9 @@ public class DynamicCategoriesServiceImpl extends ServiceImpl<DynamicCategoriesM
     @Autowired
     private DynamicService dynamicService;
 
+    @Autowired
+    private DynamicCategoriesMapper dynamicCategoriesMapper;
+
     @Override
     public ResponseResult getCategoryList() {
         //查询动态列表 状态为以发布的动态
@@ -50,5 +55,11 @@ public class DynamicCategoriesServiceImpl extends ServiceImpl<DynamicCategoriesM
         List<DynamicCategoriesVo> dynamicCategoriesVos = BeanCopyUtils.copyBeanList(dynamicCategories, DynamicCategoriesVo.class);
 
         return ResponseResult.okResult(dynamicCategoriesVos);
+    }
+
+    @Override
+    public ResponseResult getAllCategoryList() {
+        List<DynamicCategories> dynamicCategories = dynamicCategoriesMapper.selectList(null);
+        return ResponseResult.okResult(dynamicCategories);
     }
 }

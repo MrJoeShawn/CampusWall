@@ -14,5 +14,8 @@ import com.campus.framework.dao.repository.ResponseResult;
 public interface DynamicCategoriesService extends IService<DynamicCategories> {
 
     ResponseResult getCategoryList();
+
+
+    ResponseResult getAllCategoryList();
 }
 

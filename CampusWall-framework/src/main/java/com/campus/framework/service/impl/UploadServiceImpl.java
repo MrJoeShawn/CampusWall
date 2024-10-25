@@ -111,7 +111,7 @@ public class UploadServiceImpl implements UploadService {
             DefaultPutRet putRet = JSON.parseObject(response.bodyString(), DefaultPutRet.class);
 
             // 返回文件的外链 URL
-            return "http://sjl9uge8l.hn-bkt.clouddn.com/" + key;
+            return "http://sl54ful85.hn-bkt.clouddn.com/" + key;
         } catch (IOException e) {
             e.printStackTrace();
             return null;

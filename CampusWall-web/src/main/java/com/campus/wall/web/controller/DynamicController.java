@@ -61,7 +61,17 @@ public class DynamicController {
      * @return
      */
     @GetMapping("/HomepageUserInfo/{id}")
-    public ResponseResult getUserInfoByUserId(@PathVariable("id") Integer userId){
+    public ResponseResult getUserInfoByUserId(@PathVariable(value = "id", required = false) Integer userId) {
+        return dynamicService.getUserInfoByUserId(userId);
+    }
+
+    /**
+     * 用户主页展示用户信息  从token中获取用户id，如果未提供id
+     * @return
+     */
+    @GetMapping("/HomepageUserInfo")
+    public ResponseResult getCurrentUserInfo() {
+        Integer userId = SecurityUtils.getUserId();
         return dynamicService.getUserInfoByUserId(userId);
     }
 

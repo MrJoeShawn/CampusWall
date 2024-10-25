@@ -2,7 +2,7 @@ package com.campus.framework.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.campus.framework.dao.entity.DynamicTags;
-
+import com.campus.framework.dao.repository.ResponseResult;
 
 
 /**
@@ -13,5 +13,6 @@ import com.campus.framework.dao.entity.DynamicTags;
  */
 public interface DynamicTagsService extends IService<DynamicTags> {
 
+    ResponseResult getTagsList();
 }
 

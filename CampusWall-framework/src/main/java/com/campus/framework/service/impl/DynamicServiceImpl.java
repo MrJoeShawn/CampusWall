@@ -83,7 +83,7 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
 
 
     /**
-     * 分类获取动态列表
+     * 根据分类id获取动态列表
      * @param pageNum
      * @param pageSize
      * @param categoryId
@@ -106,26 +106,47 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
         return ResponseResult.okResult(pageVo);
     }
 
+
     /**
-     * 根据id获取动态详情
-     * @param id
-     * @return
+     * 根据动态 ID 获取动态详细信息
+     *
+     * @param id 动态的唯一标识符
+     * @return 返回包含动态信息的响应结果
      */
     @Override
     public ResponseResult getDynamicById(Long id) {
+        // 根据动态 ID 获取动态对象
         Dynamic dynamic = getById(id);
+
+        // 根据动态对象中的用户 ID 获取用户信息
         Users user = usersService.getById(dynamic.getUserId());
+
+        // 将 Dynamic 对象转换为 DynamicVO 对象
         DynamicVO dynamicVO = BeanCopyUtils.copyBean(dynamic, DynamicVO.class);
+
+        // 设置动态的完整名称
         dynamicVO.setFullName(user.getFullName());
+
+        // 创建 LambdaQueryWrapper 用于查询动态标签
         LambdaQueryWrapper<DynamicTags> queryWrapper = new LambdaQueryWrapper<>();
+        // 添加查询条件，匹配动态 ID
         queryWrapper.eq(DynamicTags::getDynamicId, dynamic.getDynamicId());
+
+        // 查询与该动态相关的所有标签
         List<DynamicTags> tags = dynamicTagsService.list(queryWrapper);
+
+        // 获取每个标签的详细信息并转换为 Tags 对象列表
         List<Tags> tagList = tags.stream()
                 .map(dynamicTags -> tagsService.getById(dynamicTags.getTagId()))
                 .collect(Collectors.toList());
+
+        // 将标签列表设置到 DynamicVO 对象中
         dynamicVO.setTagName(tagList);
+
+        // 返回包含动态详细信息的响应结果
         return ResponseResult.okResult(dynamicVO);
     }
+
 
     /**
      * 根据动态获取对应动态的用户信息
