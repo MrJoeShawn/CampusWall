@@ -2,7 +2,9 @@ package com.campus.wall.web.controller;
 
 import com.campus.framework.dao.repository.ResponseResult;
 import com.campus.framework.service.UploadService;
+import com.qiniu.util.Auth;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +25,17 @@ public class UploadController {
      */
     @PostMapping("/uploadUserHeaderImg")
     public ResponseResult uploadHeaderImg(@RequestParam("imgName") MultipartFile imgName) {
-        System.out.println("imgName:" + imgName);
         return uploadService.uploadHeaderImg(imgName);
+    }
+
+
+    /**
+     * 获取上传凭证
+     * @return
+     */
+    @GetMapping("/qiniutoken")
+    public ResponseResult getUploadToken() {
+        String upToken = uploadService.getUploadToken();
+        return ResponseResult.okResult(upToken);
     }
 }

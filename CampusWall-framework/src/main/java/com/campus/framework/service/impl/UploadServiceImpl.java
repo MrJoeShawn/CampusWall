@@ -45,6 +45,7 @@ public class UploadServiceImpl implements UploadService {
      */
     @Override
     public ResponseResult uploadHeaderImg(MultipartFile imgName) {
+        // 获取当前登录用户的ID
         Integer userId = SecurityUtils.getUserId();
 
         // 校验文件类型
@@ -79,8 +80,19 @@ public class UploadServiceImpl implements UploadService {
             redisCache.setCacheObject(redisKey, loginUser);
         }
 
+        // 返回成功结果，包含头像 URL 和成功消息
         return ResponseResult.okResult(url, "头像上传并更新成功");
     }
+
+    /**
+     * 获取上传凭证
+     */
+    @Override
+    public String getUploadToken() {
+        Auth auth = Auth.create(accessKey, secretKey); // 使用 Access Key 和 Secret Key 创建 Auth 对象
+        return auth.uploadToken(bucket); // 生成并返回上传凭证
+    }
+
 
 
     /**
@@ -92,13 +104,20 @@ public class UploadServiceImpl implements UploadService {
 
     /**
      * 上传文件到七牛云
+     *
+     * @param imgName 要上传的文件
+     * @param filePath 文件在七牛云上的保存路径
+     * @return 文件的外链 URL，如果上传失败则返回 null
      */
     public String uploadToOss(MultipartFile imgName, String filePath) {
         // 构造七牛云配置类
         Configuration cfg = new Configuration(Region.autoRegion());
+        // 设置上传 API 的版本
         cfg.resumableUploadAPIVersion = Configuration.ResumableUploadAPIVersion.V2;
 
+        // 创建上传管理器
         UploadManager uploadManager = new UploadManager(cfg);
+        // 定义文件在七牛云上的保存路径
         String key = filePath;
 
         try (InputStream inputStream = imgName.getInputStream()) {
@@ -108,12 +127,15 @@ public class UploadServiceImpl implements UploadService {
 
             // 上传文件
             Response response = uploadManager.put(inputStream, key, upToken, null, null);
+            // 解析上传成功的响应结果
             DefaultPutRet putRet = JSON.parseObject(response.bodyString(), DefaultPutRet.class);
 
             // 返回文件的外链 URL
             return "http://sl54ful85.hn-bkt.clouddn.com/" + key;
         } catch (IOException e) {
+            // 打印异常信息
             e.printStackTrace();
+            // 上传失败，返回 null
             return null;
         }
     }

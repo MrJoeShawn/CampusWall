@@ -1,5 +1,7 @@
 package com.campus.wall.web.controller;
 
+import com.campus.framework.dao.entity.Comments;
+import com.campus.framework.dao.entity.Dynamic;
 import com.campus.framework.dao.repository.ResponseResult;
 import com.campus.framework.service.DynamicService;
 import com.campus.framework.untils.SecurityUtils;
@@ -12,6 +14,16 @@ public class DynamicController {
 
     @Autowired
     private DynamicService dynamicService;
+
+    /**
+     * 发布动态
+     * @param dynamic
+     * @return
+     */
+    @PostMapping("/create")
+    public ResponseResult createDynamic(@RequestBody Dynamic dynamic) {
+        return dynamicService.createDynamic(dynamic);
+    }
 
     /**
      * 首页获取动态列表

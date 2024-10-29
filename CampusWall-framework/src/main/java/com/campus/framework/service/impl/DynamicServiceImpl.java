@@ -178,6 +178,19 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
     }
 
     /**
+     * 创建动态
+     * @param dynamic 动态对象
+     * @return 创建结果响应
+     */
+    @Override
+    public ResponseResult createDynamic(Dynamic dynamic) {
+        Integer userId = SecurityUtils.getUserId();
+        dynamic.setUserId(userId);
+        save(dynamic);
+        return ResponseResult.okResult();
+    }
+
+    /**
      * 获取用户信息视图对象
      * @param user 用户对象
      * @return 用户信息视图对象
