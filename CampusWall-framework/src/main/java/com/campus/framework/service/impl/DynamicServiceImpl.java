@@ -98,13 +98,39 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
             queryWrapper.eq(Dynamic::getCategoryId, categoryId);
         }
         queryWrapper.orderByDesc(Dynamic::getCreatedAt);
+
+        // 分页查询
         Page<Dynamic> page = new Page<>(pageNum, pageSize);
         page(page, queryWrapper);
+
+        // 将查询结果转换为VO列表
         List<DynamicListVO> dynamicsListVo = BeanCopyUtils.copyBeanList(page.getRecords(), DynamicListVO.class);
 
+        // 使用 HashSet 来避免用户ID重复
+        Set<Integer> userIds = dynamicsListVo.stream()
+                .map(DynamicListVO::getUserId)
+                .collect(Collectors.toSet());
+
+        // 批量获取用户信息
+        List<Users> users = usersService.listByIds(userIds);
+        Map<Long, String> userMap = users.stream()
+                .collect(Collectors.toMap(user -> Long.valueOf(user.getId()), Users::getFullName));
+
+        // 设置用户全名，若不存在则设置为 "未知用户"
+        dynamicsListVo.forEach(dynamicListVO -> {
+            Integer userId = dynamicListVO.getUserId();
+            dynamicListVO.setFullName(userMap.getOrDefault(Long.valueOf(userId), "未知用户"));
+
+            // 调试输出
+            System.out.println("User ID: " + userId + ", Full Name: " + dynamicListVO.getFullName());
+        });
+
+        // 封装分页结果
         PageVo pageVo = new PageVo(dynamicsListVo, page.getTotal());
+
         return ResponseResult.okResult(pageVo);
     }
+
 
 
     /**
@@ -179,16 +205,30 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
 
     /**
      * 创建动态
-     * @param dynamic 动态对象
+     * @param dynamicVO 动态对象
      * @return 创建结果响应
      */
-    @Override
-    public ResponseResult createDynamic(Dynamic dynamic) {
-        Integer userId = SecurityUtils.getUserId();
-        dynamic.setUserId(userId);
-        save(dynamic);
-        return ResponseResult.okResult();
-    }
+   @Override
+   public ResponseResult createDynamic(DynamicVO dynamicVO) {
+       Integer userId = SecurityUtils.getUserId();
+       dynamicVO.setUserId(userId);
+
+       Dynamic dynamic = new Dynamic();
+       dynamic.setDynamicSummary(dynamicVO.getDynamicSummary()); // 设置动态摘要
+       dynamic.setDynamicCover(dynamicVO.getDynamicCover()); // 设置动态封面
+       dynamic.setDynamicContent(dynamicVO.getDynamicContent()); // 设置动态内容
+       dynamic.setCleanedPostContent(dynamicVO.getCleanedPostContent()); // 设置已清理的动态内容
+       dynamic.setCategoryId(dynamicVO.getCategoryId()); // 设置动态分类ID
+       dynamic.setIsAnonymous(dynamicVO.getIsAnonymous()); // 设置是否匿名
+       dynamic.setAllowComments(dynamicVO.getAllowComments()); // 设置是否允许评论
+       dynamic.setIsDraft(dynamicVO.getIsDraft());// 设置是否为草稿
+       dynamic.setUserId(userId); // 确保设置用户ID
+
+       save(dynamic);
+
+       return ResponseResult.okResult();
+   }
+
 
     /**
      * 获取用户信息视图对象

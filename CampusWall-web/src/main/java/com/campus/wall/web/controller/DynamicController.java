@@ -3,6 +3,7 @@ package com.campus.wall.web.controller;
 import com.campus.framework.dao.entity.Comments;
 import com.campus.framework.dao.entity.Dynamic;
 import com.campus.framework.dao.repository.ResponseResult;
+import com.campus.framework.dao.vo.DynamicVO;
 import com.campus.framework.service.DynamicService;
 import com.campus.framework.untils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +18,13 @@ public class DynamicController {
 
     /**
      * 发布动态
-     * @param dynamic
+     * @param dynamicVO
      * @return
      */
     @PostMapping("/create")
-    public ResponseResult createDynamic(@RequestBody Dynamic dynamic) {
-        return dynamicService.createDynamic(dynamic);
+    public ResponseResult createDynamic(@RequestBody DynamicVO dynamicVO) {
+        System.out.println("dynamic = " + dynamicVO);
+        return dynamicService.createDynamic(dynamicVO);
     }
 
     /**

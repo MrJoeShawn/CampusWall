@@ -3,6 +3,7 @@ package com.campus.framework.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.campus.framework.dao.entity.Dynamic;
 import com.campus.framework.dao.repository.ResponseResult;
+import com.campus.framework.dao.vo.DynamicVO;
 
 public interface DynamicService extends IService<Dynamic> {
     ResponseResult getDynamicList(Integer pageNum,Integer pageSize);
@@ -21,5 +22,5 @@ public interface DynamicService extends IService<Dynamic> {
 
     ResponseResult getUserInfoByUserId(Integer userId);
 
-    ResponseResult createDynamic(Dynamic dynamic);
+    ResponseResult createDynamic(DynamicVO dynamicVO);
 }

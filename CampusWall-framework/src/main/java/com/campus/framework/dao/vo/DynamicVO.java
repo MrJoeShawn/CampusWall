@@ -1,6 +1,7 @@
 package com.campus.framework.dao.vo;
 
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.campus.framework.dao.entity.Tags;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,8 @@ public class DynamicVO {
     private String dynamicContent;
     //清理后的动态内容，使用DOMPurify确保安全
     private String cleanedPostContent;
+    //动态分类ID
+    private Integer categoryId;
     //是否匿名发布 “0”否 “1”是 默认为否
     private Integer isAnonymous;
     //是否允许评论  “0”否 “1”是 默认为是
@@ -43,5 +46,5 @@ public class DynamicVO {
     //全名
     private String fullName;
     //标签名称
-    private List tagName;
+    private List<Tags> tagName;
 }
