@@ -1,10 +1,13 @@
 package com.campus.framework.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.campus.framework.dao.entity.Tags;
 import com.campus.framework.dao.mapper.TagsMapper;
 import com.campus.framework.service.TagsService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 /**
@@ -15,5 +18,10 @@ import org.springframework.stereotype.Service;
  */
 @Service("tagsService")
 public class TagsServiceImpl extends ServiceImpl<TagsMapper, Tags> implements TagsService {
-
+    @Override
+    public List<Tags> findTagsByNames(List<String> tagNames) {
+        LambdaQueryWrapper<Tags> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(Tags::getTagName, tagNames); // 根据标签名称批量查询
+        return list(queryWrapper);
+    }
 }

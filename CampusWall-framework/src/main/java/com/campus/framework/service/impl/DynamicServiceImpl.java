@@ -208,26 +208,59 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
      * @param dynamicVO 动态对象
      * @return 创建结果响应
      */
-   @Override
-   public ResponseResult createDynamic(DynamicVO dynamicVO) {
-       Integer userId = SecurityUtils.getUserId();
-       dynamicVO.setUserId(userId);
+    @Override
+    public ResponseResult createDynamic(DynamicVO dynamicVO) {
+        // 获取当前用户ID
+        Integer userId = SecurityUtils.getUserId();
+        dynamicVO.setUserId(userId);
 
-       Dynamic dynamic = new Dynamic();
-       dynamic.setDynamicSummary(dynamicVO.getDynamicSummary()); // 设置动态摘要
-       dynamic.setDynamicCover(dynamicVO.getDynamicCover()); // 设置动态封面
-       dynamic.setDynamicContent(dynamicVO.getDynamicContent()); // 设置动态内容
-       dynamic.setCleanedPostContent(dynamicVO.getCleanedPostContent()); // 设置已清理的动态内容
-       dynamic.setCategoryId(dynamicVO.getCategoryId()); // 设置动态分类ID
-       dynamic.setIsAnonymous(dynamicVO.getIsAnonymous()); // 设置是否匿名
-       dynamic.setAllowComments(dynamicVO.getAllowComments()); // 设置是否允许评论
-       dynamic.setIsDraft(dynamicVO.getIsDraft());// 设置是否为草稿
-       dynamic.setUserId(userId); // 确保设置用户ID
+        // 创建动态对象并保存
+        Dynamic dynamic = new Dynamic();
+        dynamic.setDynamicSummary(dynamicVO.getDynamicSummary());
+        dynamic.setDynamicCover(dynamicVO.getDynamicCover());
+        dynamic.setDynamicContent(dynamicVO.getDynamicContent());
+        dynamic.setCleanedPostContent(dynamicVO.getCleanedPostContent());
+        dynamic.setCategoryId(dynamicVO.getCategoryId());
+        dynamic.setIsAnonymous(dynamicVO.getIsAnonymous());
+        dynamic.setAllowComments(dynamicVO.getAllowComments());
+        dynamic.setIsDraft(dynamicVO.getIsDraft());
+        dynamic.setUserId(userId);
 
-       save(dynamic);
+        save(dynamic);
+        Integer dynamicId = dynamic.getDynamicId(); // 获取新创建的动态ID
 
-       return ResponseResult.okResult();
-   }
+        // 获取前端传来的标签名称列表
+        List<String> tagNames = dynamicVO.getTagName().stream()
+                .map(Tags::getTagName)
+                .collect(Collectors.toList());
+
+        // 批量查询现有标签
+        List<Tags> existingTags = tagsService.findTagsByNames(tagNames); // 批量查询
+
+        // 将现有标签名称与标签对象映射到一个 Map 以便快速查找
+        Map<String, Tags> tagMap = existingTags.stream()
+                .collect(Collectors.toMap(Tags::getTagName, tag -> tag));
+
+        // 处理标签
+        for (String tagName : tagNames) {
+            Tags existingTag = tagMap.get(tagName); // 从 Map 中获取标签
+
+            if (existingTag == null) {
+                // 标签不存在，创建新标签
+                existingTag = new Tags();
+                existingTag.setTagName(tagName);
+                tagsService.save(existingTag); // 保存新标签
+            }
+
+            // 添加动态与标签的关系
+            DynamicTags dynamicTag = new DynamicTags();
+            dynamicTag.setDynamicId(Long.valueOf(dynamicId));
+            dynamicTag.setTagId(existingTag.getTagId());
+            dynamicTagsService.save(dynamicTag); // 保存关系
+        }
+
+        return ResponseResult.okResult();
+    }
 
 
     /**
