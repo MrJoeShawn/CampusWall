@@ -1,6 +1,5 @@
 package com.campus.framework.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.campus.framework.dao.entity.Tags;
 import com.campus.framework.dao.mapper.DynamicTagsMapper;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.campus.framework.dao.entity.DynamicTags;
 
-import javax.management.Query;
 import java.util.List;
 
 /**

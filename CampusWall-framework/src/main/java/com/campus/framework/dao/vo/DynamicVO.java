@@ -39,6 +39,8 @@ public class DynamicVO {
     private Integer viewCount;
     //点赞次数
     private Integer likeCount;
+    //收藏次数
+    private Integer favoriteCount;
     //评论次数
     private Integer commentCount;
     //创建时间

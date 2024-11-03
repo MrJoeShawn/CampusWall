@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="campus_wall@localhost" uuid="7770d4df-2a11-4f00-bcc9-2e7179943852">
+    <data-source source="LOCAL" name="campus_wall@localhost" uuid="632ed29f-a337-4e0b-9d46-88cbc4262c5b">
       <driver-ref>mysql_aurora_aws</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>software.aws.rds.jdbc.mysql.Driver</jdbc-driver>

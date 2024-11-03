@@ -210,7 +210,6 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
      */
     @Override
     public ResponseResult createDynamic(DynamicVO dynamicVO) {
-        // 获取当前用户ID
         Integer userId = SecurityUtils.getUserId();
         dynamicVO.setUserId(userId);
 
