@@ -18,24 +18,46 @@ public class DynamicInteractionController {
     @Autowired
     FavoritesService favoritesService;
 
+    /**
+     * 用户点击动态喜欢
+     * @param dynamicId
+     * @return
+     */
     @PostMapping("/like")
     public ResponseResult likeDynamic(Long dynamicId){
         Long userId = Long.valueOf(SecurityUtils.getUserId());
         return likesService.likeDynamic(userId,dynamicId);
     }
 
+    /**
+     * 用户点击动态收藏
+     * @param dynamicId
+     * @return
+     */
     @PostMapping("/collect")
     public ResponseResult collectDynamic(Long dynamicId){
         Long userId = Long.valueOf(SecurityUtils.getUserId());
         return favoritesService.collectDynamic(userId,dynamicId);
     }
 
+    /**
+     * 个人主页展示用户喜欢的动态  我的喜欢
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
     @GetMapping("/like")
     public ResponseResult getLikeStatus(Integer pageNum, Integer pageSize){
         Integer userId = SecurityUtils.getUserId();
         return likesService.getLikeStatus(pageNum,pageSize,userId);
     }
 
+    /**
+     * 个人主页展示用户收藏的动态 我的收藏
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
     @GetMapping("/collect")
     public ResponseResult getCollectStatus(Integer pageNum, Integer pageSize){
         Integer userId = SecurityUtils.getUserId();

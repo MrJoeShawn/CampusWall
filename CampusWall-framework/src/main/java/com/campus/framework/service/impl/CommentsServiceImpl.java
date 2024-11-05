@@ -17,6 +17,7 @@ import com.campus.framework.service.UsersService;
 import com.campus.framework.untils.BeanCopyUtils;
 import com.campus.framework.untils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

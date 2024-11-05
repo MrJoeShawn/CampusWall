@@ -5,21 +5,16 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.campus.framework.constants.SystemConstants;
-import com.campus.framework.dao.entity.Dynamic;
-import com.campus.framework.dao.entity.DynamicTags;
-import com.campus.framework.dao.entity.Tags;
-import com.campus.framework.dao.entity.Users;
+import com.campus.framework.dao.entity.*;
 import com.campus.framework.dao.enums.AppHttpCodeEnum;
 import com.campus.framework.dao.mapper.DynamicMapper;
 import com.campus.framework.dao.repository.ResponseResult;
 import com.campus.framework.dao.vo.*;
-import com.campus.framework.service.DynamicService;
-import com.campus.framework.service.DynamicTagsService;
-import com.campus.framework.service.TagsService;
-import com.campus.framework.service.UsersService;
+import com.campus.framework.service.*;
 import com.campus.framework.untils.BeanCopyUtils;
 import com.campus.framework.untils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -36,6 +31,14 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
 
     @Autowired
     DynamicTagsService dynamicTagsService;
+
+    @Autowired
+    @Lazy
+    LikesService likesService;
+
+    @Autowired
+    @Lazy
+    FavoritesService favoritesService;
 
     /**
      * 首页获取动态列表
@@ -120,9 +123,6 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
         dynamicsListVo.forEach(dynamicListVO -> {
             Integer userId = dynamicListVO.getUserId();
             dynamicListVO.setFullName(userMap.getOrDefault(Long.valueOf(userId), "未知用户"));
-
-            // 调试输出
-            System.out.println("User ID: " + userId + ", Full Name: " + dynamicListVO.getFullName());
         });
 
         // 封装分页结果
@@ -158,17 +158,38 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
         // 添加查询条件，匹配动态 ID
         queryWrapper.eq(DynamicTags::getDynamicId, dynamic.getDynamicId());
 
+        // 查询该动态对应的标签信息
         // 查询与该动态相关的所有标签
         List<DynamicTags> tags = dynamicTagsService.list(queryWrapper);
-
         // 获取每个标签的详细信息并转换为 Tags 对象列表
         List<Tags> tagList = tags.stream()
                 .map(dynamicTags -> tagsService.getById(dynamicTags.getTagId()))
                 .collect(Collectors.toList());
-
         // 将标签列表设置到 DynamicVO 对象中
         dynamicVO.setTagName(tagList);
 
+        // 查询该用户是否喜欢该动态
+        LambdaQueryWrapper<Likes> likesQueryWrapper = new LambdaQueryWrapper<>();
+        likesQueryWrapper.eq(Likes::getUserId, user.getId());
+        likesQueryWrapper.eq(Likes::getDynamicId, dynamic.getDynamicId());
+        // 执行查询，判断用户是否已点赞该动态
+        Likes like = likesService.getOne(likesQueryWrapper); // 使用 getOne 查询单条记录
+        if (like != null) {
+            dynamicVO.setIsLike(SystemConstants.LIKE_STATUS_YES); // 用户已点赞
+        } else {
+            dynamicVO.setIsLike(SystemConstants.LIKE_STATUS_NO); // 用户未点赞
+        }
+
+        //查询用户是否收藏了该动态
+        LambdaQueryWrapper<Favorites> favoritesQueryWrapper = new LambdaQueryWrapper<>();
+        favoritesQueryWrapper.eq(Favorites::getUserId, user.getId());
+        favoritesQueryWrapper.eq(Favorites::getDynamicId, dynamic.getDynamicId());
+        Favorites favorites = favoritesService.getOne(favoritesQueryWrapper);
+        if (favorites != null) {
+            dynamicVO.setIsFavorite(SystemConstants.COLLECT_STATUS_YES);
+        } else {
+            dynamicVO.setIsFavorite(SystemConstants.COLLECT_STATUS_NO);
+        }
         // 返回包含动态详细信息的响应结果
         return ResponseResult.okResult(dynamicVO);
     }
@@ -377,6 +398,4 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
         PageVo pageVo = new PageVo(userDynamicListVOS, page.getTotal());
         return pageVo;
     }
-
-
 }

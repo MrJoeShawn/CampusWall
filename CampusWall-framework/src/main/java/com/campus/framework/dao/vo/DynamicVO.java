@@ -49,4 +49,8 @@ public class DynamicVO {
     private String fullName;
     //标签名称
     private List<Tags> tagName;
+    //是否喜欢 “0”否 “1”是
+    private Integer isLike;
+    //是否收藏 “0”否 “1”是
+    private Integer isFavorite;
 }

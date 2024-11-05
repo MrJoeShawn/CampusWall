@@ -28,4 +28,23 @@ public class SystemConstants {
     public static final int ARTICLE_STATUS_TOP=1;
 
 
+    /**
+     * 用户喜欢这条动态
+     */
+    public static final int LIKE_STATUS_YES=1;
+
+    /**
+     * 用户不喜欢这条动态
+     */
+    public static final int LIKE_STATUS_NO=0;
+
+    /**
+     * 用户收藏了动态
+     */
+    public static final int COLLECT_STATUS_YES=1;
+
+    /**
+     * 用户没有收藏动态
+     */
+    public static final int COLLECT_STATUS_NO=0;
 }
