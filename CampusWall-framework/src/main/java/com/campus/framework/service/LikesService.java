@@ -14,5 +14,6 @@ public interface LikesService extends IService<Likes> {
 
     ResponseResult likeDynamic(Long userId, Long dynamicId);
 
+    ResponseResult getLikeStatus(Integer pageNum, Integer pageSize, Integer userId);
 }
 

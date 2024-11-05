@@ -36,6 +36,10 @@ public class DynamicCategoriesServiceImpl extends ServiceImpl<DynamicCategoriesM
     @Autowired
     private DynamicCategoriesMapper dynamicCategoriesMapper;
 
+    /**
+     * 查询分类列表
+     * @return
+     */
     @Override
     public ResponseResult getCategoryList() {
         //查询动态列表 状态为以发布的动态
@@ -57,6 +61,10 @@ public class DynamicCategoriesServiceImpl extends ServiceImpl<DynamicCategoriesM
         return ResponseResult.okResult(dynamicCategoriesVos);
     }
 
+    /**
+     * 查询所有分类列表
+     * @return
+     */
     @Override
     public ResponseResult getAllCategoryList() {
         List<DynamicCategories> dynamicCategories = dynamicCategoriesMapper.selectList(null);
