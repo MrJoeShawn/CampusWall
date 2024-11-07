@@ -135,8 +135,12 @@ public class DynamicController {
      */
     @PutMapping("/topdynamics")
     public ResponseResult updateTopDynamics(@RequestParam Integer dynamicId) {
-        System.out.println("dynamicId = " + dynamicId);
         return dynamicService.updateTopDynamics(dynamicId);
     }
 
+
+    @GetMapping("/searchDynamic")
+    public ResponseResult selectByDynamicSummary(String dynamicSummary,Integer pageNum, Integer pageSize) {
+        return dynamicService.selectByDynamicSummary(dynamicSummary,pageNum,pageSize);
+    }
 }

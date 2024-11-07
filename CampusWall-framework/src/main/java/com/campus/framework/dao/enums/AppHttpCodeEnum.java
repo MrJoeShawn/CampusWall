@@ -36,7 +36,12 @@ public enum AppHttpCodeEnum {
     // 无效的用户ID
     INVALID_USER_ID(611, "无效的用户ID"),
     // 动态不存在
-    DYNAMIC_NOT_FOUND(612, "动态不存在");
+    DYNAMIC_NOT_FOUND(612, "动态不存在"),
+    // 搜索内容不能为空
+    CONTENT_NOT_EMPTY(613, "搜索内容不能为空"),
+    // 查询动态时发生错误
+    QUERY_DYNAMIC_ERROR(614, "查询动态时发生错误"),
+    ;
 
 
     // 状态码

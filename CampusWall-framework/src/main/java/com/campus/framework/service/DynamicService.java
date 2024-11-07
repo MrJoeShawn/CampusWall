@@ -23,4 +23,6 @@ public interface DynamicService extends IService<Dynamic> {
     ResponseResult getUserInfoByUserId(Integer userId);
 
     ResponseResult createDynamic(DynamicVO dynamicVO);
+
+    ResponseResult selectByDynamicSummary(String dynamicSummary, Integer pageNum, Integer pageSize);
 }

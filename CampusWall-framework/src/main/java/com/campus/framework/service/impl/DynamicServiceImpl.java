@@ -78,9 +78,9 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
             Integer userId = dynamicListVO.getUserId();
             dynamicListVO.setFullName(userMap.getOrDefault(Long.valueOf(userId), "未知用户"));
         });
-
+        PageVo pageVo = new PageVo(dynamicsListVo, page.getTotal());
         // 返回封装结果
-        return ResponseResult.okResult(dynamicsListVo);
+        return ResponseResult.okResult(pageVo);
     }
 
 
@@ -281,6 +281,69 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
 
         return ResponseResult.okResult();
     }
+
+    /**
+     * 根据摘要搜索动态
+     * @param dynamicSummary
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public ResponseResult selectByDynamicSummary(String dynamicSummary, Integer pageNum, Integer pageSize) {
+        // 输入验证
+        if (dynamicSummary == null || dynamicSummary.trim().isEmpty()) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.CONTENT_NOT_EMPTY);
+        }
+
+        try {
+            // 查询动态
+            LambdaQueryWrapper<Dynamic> wrapper = new LambdaQueryWrapper<>();
+            wrapper.like(Dynamic::getDynamicSummary, dynamicSummary)
+                    .eq(Dynamic::getIsDraft, SystemConstants.ARTICLE_STATUS_DRAFT)
+                    .eq(Dynamic::getIsDeleted, SystemConstants.ARTICLE_STATUS_NORMAL)
+                    .orderByDesc(Dynamic::getCreatedAt);
+
+            // 分页查询
+            Page<Dynamic> page = new Page<>(pageNum, pageSize);
+            page(page, wrapper);
+
+            // 获取查询结果
+            List<Dynamic> dynamicList = page.getRecords();
+            if (dynamicList.isEmpty()) {
+                return ResponseResult.okResult("暂无无相关动态");  // 提示前端无数据
+            }
+
+            // 将查询结果转换为VO列表
+            List<DynamicListVO> dynamicsListVo = dynamicList.stream()
+                    .map(dynamic -> BeanCopyUtils.copyBean(dynamic, DynamicListVO.class))
+                    .collect(Collectors.toList());
+
+            // 使用 HashSet 来避免用户ID重复
+            Set<Integer> userIds = dynamicsListVo.stream()
+                    .map(DynamicListVO::getUserId)
+                    .collect(Collectors.toSet());
+
+            // 批量获取用户信息
+            List<Users> users = usersService.listByIds(userIds);
+            Map<Long, String> userMap = users.stream()
+                    .collect(Collectors.toMap(user -> Long.valueOf(user.getId()), Users::getFullName));
+
+            // 设置用户全名，若不存在则设置为 "未知用户"
+            dynamicsListVo.forEach(dynamicListVO -> {
+                Integer userId = dynamicListVO.getUserId();
+                dynamicListVO.setFullName(userMap.getOrDefault(Long.valueOf(userId), "未知用户"));
+            });
+
+            // 封装分页结果
+            PageVo pageVo = new PageVo(dynamicsListVo, page.getTotal());
+            return ResponseResult.okResult(pageVo);
+
+        } catch (Exception e) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.QUERY_DYNAMIC_ERROR);
+        }
+    }
+
 
 
     /**
