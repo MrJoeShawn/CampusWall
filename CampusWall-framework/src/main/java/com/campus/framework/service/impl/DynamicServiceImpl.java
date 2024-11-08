@@ -244,6 +244,7 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
         dynamic.setIsAnonymous(dynamicVO.getIsAnonymous());
         dynamic.setAllowComments(dynamicVO.getAllowComments());
         dynamic.setIsDraft(dynamicVO.getIsDraft());
+        dynamic.setCreatedBy(Long.valueOf(dynamicVO.getUserId()));
         dynamic.setUserId(userId);
 
         save(dynamic);
