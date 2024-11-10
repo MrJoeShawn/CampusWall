@@ -55,35 +55,43 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // 关闭csrf
+        // 禁用 CSRF 防护，因为使用 JWT 不需要 CSRF 保护
         http.csrf().disable()
-        // 不通过Session获取SecurityContext
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-        .authorizeRequests()
-        // 对于登录接口 允许匿名访问
-        .antMatchers("/doc.html", "/doc.html/**", "/login", "/swagger-ui.html", "/webjars/**", "/v2/**", "/swagger-resources/**").permitAll()
-                .antMatchers("/logout").authenticated()
-                .antMatchers("/upload").authenticated()
-                .antMatchers("/uploadUserHeaderImg").authenticated()
-                .antMatchers("/userInfo").authenticated()
-                .antMatchers("/creatrdynamic").authenticated()
-        .anyRequest().permitAll();
-        //注销接口需要认证才能访问
-//        .antMatchers("/doc.html#/**","/login","/swagger-ui.html", "/webjars/**", "/v2/**", "/swagger-resources/**").anonymous()
-//        .anyRequest().permitAll();
-        //配置异常处理器
+
+                // 配置 session 策略为无状态 (STATELESS)，因为我们使用 JWT 实现身份验证，而不使用 session 存储用户信息
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+
+                // 配置 URL 权限控制
+                .authorizeRequests()
+                // 允许访问以下路径，无需认证
+                .antMatchers("/doc.html", "/doc.html/**", "/login", "/swagger-ui.html", "/webjars/**", "/v2/**", "/swagger-resources/**").permitAll()
+                // 只有认证用户才能访问以下路径
+                .antMatchers("/logout").authenticated()                  // 登出
+                .antMatchers("/upload").authenticated()                  // 文件上传
+                .antMatchers("/uploadUserHeaderImg").authenticated()     // 上传用户头像
+                .antMatchers("/userInfo").authenticated()                // 用户信息
+                .antMatchers("/creatrdynamic").authenticated()           // 创建动态
+                .antMatchers("/like").authenticated()                    // 喜欢动态
+                .antMatchers("/collect").authenticated()                 // 收藏动态
+                // 其他所有请求默认允许
+                .anyRequest().permitAll();
+
+        // 配置异常处理器，当认证失败或授权失败时的响应处理
         http.exceptionHandling()
-                .authenticationEntryPoint(authenticationEntryPoint)
-                .accessDeniedHandler(accessDeniedHandler);
-        // 禁用登出功能
+                .authenticationEntryPoint(authenticationEntryPoint)      // 认证失败时调用该入口
+                .accessDeniedHandler(accessDeniedHandler);               // 授权失败时调用该处理器
+
+        // 禁用 Spring Security 的默认登出功能，因为我们自定义了登出逻辑
         http.logout().disable();
-        // 把jwtAuthenticationTokenFilter添加到SpringSecurity的过滤器链中
-        http.addFilterBefore(jwtAuthenticationTokenFilter,
-                UsernamePasswordAuthenticationFilter.class);
-        // 允许跨域
+
+        // 在请求过滤链中添加 JWT 认证过滤器，该过滤器会在用户名密码认证过滤器之前执行
+        http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+
+        // 启用跨域请求支持
         http.cors();
     }
+
 
 
     /**

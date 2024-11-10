@@ -57,6 +57,7 @@ public class UploadServiceImpl implements UploadService {
         // 生成上传文件路径并上传到七牛云
         String filePath = PathUtils.generateFilePath(originalFilename);
         String url = uploadToOss(imgName, filePath);
+        System.out.println("文件外链地址：" + url);
         if (url == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.UPLOAD_FAILED, "文件上传失败");
         }
@@ -131,7 +132,7 @@ public class UploadServiceImpl implements UploadService {
             DefaultPutRet putRet = JSON.parseObject(response.bodyString(), DefaultPutRet.class);
 
             // 返回文件的外链 URL
-            return "http://sl54ful85.hn-bkt.clouddn.com/" + key;
+            return "http://smq8ff2j3.hn-bkt.clouddn.com/" + key;
         } catch (IOException e) {
             // 打印异常信息
             e.printStackTrace();

@@ -644,8 +644,8 @@
               <option name="name" value="Users" />
               <option name="preName" value="" />
               <option name="saveModelName" value="CampusWall-framework" />
-              <option name="savePackageName" value="com.campus.framework.dao" />
-              <option name="savePath" value="./CampusWall-framework/src/main/java/com/campus/framework/dao" />
+              <option name="savePackageName" value="com.campus.framework" />
+              <option name="savePath" value="./CampusWall-framework/src/main/java/com/campus/framework" />
               <option name="templateGroupName" value="MybatisPlus" />
             </TableInfoDTO>
           </value>

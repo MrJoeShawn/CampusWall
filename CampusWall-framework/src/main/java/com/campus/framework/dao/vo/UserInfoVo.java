@@ -1,7 +1,5 @@
 package com.campus.framework.dao.vo;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.campus.framework.dao.enums.Gender;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -21,8 +19,8 @@ public class UserInfoVo {
     private String phoneNumber;
     //全名
     private String fullName;
-    //性别  'Male男-1','Female女-0','Other其他-2'
-    private Gender gender;
+    //性别  '男-1','女-0','其他-2'
+    private String gender;
     //生日
     private Date birthdate;
     //地址

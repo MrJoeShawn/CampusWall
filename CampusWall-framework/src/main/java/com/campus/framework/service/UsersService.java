@@ -4,8 +4,16 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.campus.framework.dao.entity.Users;
 import com.campus.framework.dao.repository.ResponseResult;
 
+/**
+ * 用户表(Users)表服务接口
+ *
+ * @author makejava
+ * @since 2024-11-10 16:12:55
+ */
 public interface UsersService extends IService<Users> {
-    ResponseResult updateUserInfo(Users users);
 
     ResponseResult getUserInfo();
+
+    ResponseResult updateUserInfo(Users users);
 }
+

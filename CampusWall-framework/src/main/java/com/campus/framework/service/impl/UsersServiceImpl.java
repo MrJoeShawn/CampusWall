@@ -13,11 +13,9 @@ import com.campus.framework.untils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 @Service
 public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements UsersService {
@@ -41,8 +39,8 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
      */
     @Override
     public ResponseResult updateUserInfo(Users users) {
+        System.out.println("updateUserInfo" + users);
         try {
-            System.out.println(users);
             Integer userId = SecurityUtils.getUserId();
             Users updateUser = usersMapper.selectById(userId);
             if (updateUser == null) {
@@ -50,11 +48,11 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
                 return ResponseResult.errorResult(AppHttpCodeEnum.USER_NOT_FOUND);
             }
 
-
-            // 直接使用updateUser对象来设置新的信息
-            updateUser.setFullName(users.getFullName());
+            System.out.println(users.getBirthdate());
+            // 设置其他用户信息
             updateUser.setGender(users.getGender());
             updateUser.setBirthdate(users.getBirthdate());
+            updateUser.setFullName(users.getFullName());
             updateUser.setAddress(users.getAddress());
             updateUser.setMajor(users.getMajor());
             updateUser.setEmail(users.getEmail());
@@ -89,6 +87,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
 
             // 转换为 VO 对象，返回用户信息
             UserInfoVo userInfoVo = BeanCopyUtils.copyBean(user, UserInfoVo.class);
+            System.out.println("getUserInfo" + userInfoVo);
             return ResponseResult.okResult(userInfoVo);
         } catch (Exception e) {
             log.error("获取用户信息失败", e);

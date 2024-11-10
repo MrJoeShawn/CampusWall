@@ -15,7 +15,7 @@ public class JwtUtil {
 
     // 定义JWT的有效期为24小时
     public static final Long JWT_TTL = 24 * 60 * 60 * 1000L; // 24小时的毫秒数
-//    public static final Long JWT_TTL = 60 * 1000L;
+//    public static final Long JWT_TTL = 2 * 1000L;  // 1分钟
     // 定义JWT的密钥
     public static final String JWT_KEY = "MrJoe";
 
@@ -129,5 +129,4 @@ public class JwtUtil {
                 .parseClaimsJws(jwt)
                 .getBody();
     }
-
 }
