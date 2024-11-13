@@ -25,4 +25,6 @@ public interface DynamicService extends IService<Dynamic> {
     ResponseResult createDynamic(DynamicVO dynamicVO);
 
     ResponseResult selectByDynamicSummary(String dynamicSummary, Integer pageNum, Integer pageSize);
+
+    ResponseResult updateGetDynamic(Integer dynamicId);
 }

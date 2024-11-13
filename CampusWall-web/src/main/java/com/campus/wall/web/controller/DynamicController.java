@@ -138,9 +138,18 @@ public class DynamicController {
         return dynamicService.updateTopDynamics(dynamicId);
     }
 
-
+    /**
+     * 搜索动态
+     * @param dynamicSummary
+     * @return
+     */
     @GetMapping("/searchDynamic")
     public ResponseResult selectByDynamicSummary(String dynamicSummary,Integer pageNum, Integer pageSize) {
         return dynamicService.selectByDynamicSummary(dynamicSummary,pageNum,pageSize);
+    }
+
+    @GetMapping("/update/{dynamicId}")
+    public ResponseResult updateGetDynamic(@PathVariable Integer dynamicId) {
+        return dynamicService.updateGetDynamic(dynamicId);
     }
 }

@@ -47,8 +47,8 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
                 log.warn("用户ID {} 不存在", userId);
                 return ResponseResult.errorResult(AppHttpCodeEnum.USER_NOT_FOUND);
             }
+            System.out.println("用户的出生日期: " + users.getBirthdate());
 
-            System.out.println(users.getBirthdate());
             // 设置其他用户信息
             updateUser.setGender(users.getGender());
             updateUser.setBirthdate(users.getBirthdate());
