@@ -63,4 +63,17 @@ public class DynamicInteractionController {
         Integer userId = SecurityUtils.getUserId();
         return favoritesService.getCollectStatus(pageNum,pageSize,userId);
     }
+
+
+    /**
+     * 个人主页展示用户发布的草稿 我的草稿
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @GetMapping("/draft")
+    public ResponseResult getDraftStatus(Integer pageNum, Integer pageSize){
+        Integer userId = SecurityUtils.getUserId();
+        return favoritesService.getDraftStatus(pageNum,pageSize,userId);
+    }
 }

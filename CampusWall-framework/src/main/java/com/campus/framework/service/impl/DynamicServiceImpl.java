@@ -50,8 +50,8 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
     public ResponseResult getDynamicList(Integer pageNum, Integer pageSize) {
         // 创建查询条件，查询未删除且已发布的动态，按创建时间倒序排列
         LambdaQueryWrapper<Dynamic> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Dynamic::getIsDeleted, SystemConstants.ARTICLE_STATUS_DRAFT)
-                .eq(Dynamic::getIsDraft, SystemConstants.ARTICLE_STATUS_NORMAL)
+        queryWrapper.eq(Dynamic::getIsDeleted, SystemConstants.ARTICLE_STATUS_NOTDELETED)
+                .eq(Dynamic::getIsDraft, SystemConstants.ARTICLE_STATUS_NOTDRAFT)
                 .eq(Dynamic::getIsPrivate, SystemConstants.DYNAMIC_STATUS_PUBLIC)
                 .orderByDesc(Dynamic::getCreatedAt);
 

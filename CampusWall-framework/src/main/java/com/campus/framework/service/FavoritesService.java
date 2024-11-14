@@ -15,5 +15,7 @@ public interface FavoritesService extends IService<Favorites> {
     ResponseResult collectDynamic(Long userId, Long dynamicId);
 
     ResponseResult getCollectStatus(Integer pageNum, Integer pageSize, Integer userId);
+
+    ResponseResult getDraftStatus(Integer pageNum, Integer pageSize, Integer userId);
 }
 

@@ -4,9 +4,24 @@ import com.campus.framework.dao.enums.AppHttpCodeEnum;
 
 public class SystemConstants {
     /**
+     *  动态被删除
+     */
+    public static final int ARTICLE_STATUS_DELETED = 1;
+
+    /**
+     *  文章未删除
+     */
+    public static final int ARTICLE_STATUS_NOTDELETED = 0;
+
+    /**
      *  文章是草稿
      */
-    public static final int ARTICLE_STATUS_DRAFT = 0;
+    public static final int ARTICLE_STATUS_DRAFT = 1;
+
+    /**
+     * 文章不是草稿
+     */
+    public static final int ARTICLE_STATUS_NOTDRAFT = 0;
 
     /**
      *  文章是正常分布状态
