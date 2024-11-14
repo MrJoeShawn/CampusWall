@@ -7,7 +7,7 @@ import com.campus.framework.dao.entity.Dynamic;
  * 用户动态表(Dynamic)表数据库访问层
  *
  * @author makejava
- * @since 2024-11-03 15:30:30
+ * @since 2024-11-14 15:41:21
  */
 public interface DynamicMapper extends BaseMapper<Dynamic> {
 

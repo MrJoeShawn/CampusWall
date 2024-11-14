@@ -7,6 +7,7 @@ public class SystemConstants {
      *  文章是草稿
      */
     public static final int ARTICLE_STATUS_DRAFT = 0;
+
     /**
      *  文章是正常分布状态
      */
@@ -47,4 +48,16 @@ public class SystemConstants {
      * 用户没有收藏动态
      */
     public static final int COLLECT_STATUS_NO=0;
+
+    /**
+     * 动态状态为仅自己可见
+     */
+    public static final int DYNAMIC_STATUS_PRIVATE=1;
+
+    /**
+     * 动态状态为公开
+     */
+    public static final int DYNAMIC_STATUS_PUBLIC=0;
+
+
 }

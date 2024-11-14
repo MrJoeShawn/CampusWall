@@ -43,6 +43,12 @@ public enum AppHttpCodeEnum {
     QUERY_DYNAMIC_ERROR(614, "查询动态时发生错误"),
     // 动态已经删除
     DYNAMIC_DELETED(615, "动态已经删除"),
+    // 已设置为仅自己可见
+    DYNAMIC_PRIVATE(616, "仅自己可见"),
+    // 公开可见
+    DYNAMIC_PUBLIC(617, "公开可见"),
+    // 动态更新失败
+    DYNAMIC_UPDATE_FAILED(618, "动态更新失败")
 
     ;
 

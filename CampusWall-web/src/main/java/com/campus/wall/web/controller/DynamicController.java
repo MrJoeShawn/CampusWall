@@ -80,7 +80,7 @@ public class DynamicController {
     }
 
     /**
-     * 用户主页展示用户信息  从token中获取用户id，如果未提供id
+     * 用户主页展示用户信息  从token中获取用户id
      * @return
      */
     @GetMapping("/HomepageUserInfo")
@@ -166,5 +166,15 @@ public class DynamicController {
     @PutMapping("/delete")
     public ResponseResult deleteDynamic(@RequestParam Integer dynamicId) {
         return dynamicService.deleteDynamic(dynamicId);
+    }
+
+    /**
+     * 设置动态为私人的
+     * @param dynamicId
+     * @return
+     */
+    @PutMapping("/private")
+    public ResponseResult updatePrivate(@RequestParam Integer dynamicId) {
+        return dynamicService.updatePrivate(dynamicId);
     }
 }

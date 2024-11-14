@@ -52,6 +52,7 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
         LambdaQueryWrapper<Dynamic> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Dynamic::getIsDeleted, SystemConstants.ARTICLE_STATUS_DRAFT)
                 .eq(Dynamic::getIsDraft, SystemConstants.ARTICLE_STATUS_NORMAL)
+                .eq(Dynamic::getIsPrivate, SystemConstants.DYNAMIC_STATUS_PUBLIC)
                 .orderByDesc(Dynamic::getCreatedAt);
 
         // 分页查询
@@ -135,7 +136,6 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
 
     /**
      * 根据动态 ID 获取动态详细信息
-     *
      * @param id 动态的唯一标识符
      * @return 返回包含动态信息的响应结果
      */
@@ -380,6 +380,11 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
         return ResponseResult.okResult(dynamicVO);
     }
 
+    /**
+     * 删除动态
+     * @param dynamicId
+     * @return
+     */
     @Override
     public ResponseResult deleteDynamic(Integer dynamicId) {
         // 先检查 dynamicId 是否存在
@@ -400,6 +405,41 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
 
         // 删除成功，返回成功的响应
         return ResponseResult.okResult();
+    }
+
+    /**
+     * 更新动态为仅自己可见
+     * @param dynamicId
+     * @return
+     */
+    @Override
+    public ResponseResult updatePrivate(Integer dynamicId) {
+        // 检查动态是否存在
+        Dynamic dynamic = getById(dynamicId);
+        if (dynamic == null) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.DYNAMIC_NOT_FOUND);
+        }
+
+        // 判断动态状态是否为仅自己可见
+        if (dynamic.getIsPrivate() == SystemConstants.DYNAMIC_STATUS_PRIVATE) {
+            // 当前状态为仅自己可见，则设置为公开可见
+            dynamic.setIsPrivate(SystemConstants.DYNAMIC_STATUS_PUBLIC);
+            boolean updated = updateById(dynamic);  // 更新数据库
+            if (updated) {
+                return ResponseResult.okResult("动态已设置为公开可见");
+            } else {
+                return ResponseResult.errorResult(AppHttpCodeEnum.DYNAMIC_UPDATE_FAILED, "更新动态状态失败");
+            }
+        } else {
+            // 当前状态为公开可见，则设置为仅自己可见
+            dynamic.setIsPrivate(SystemConstants.DYNAMIC_STATUS_PRIVATE);
+            boolean updated = updateById(dynamic);  // 更新数据库
+            if (updated) {
+                return ResponseResult.okResult("动态已设置为仅自己可见");
+            } else {
+                return ResponseResult.errorResult(AppHttpCodeEnum.DYNAMIC_UPDATE_FAILED, "更新动态状态失败");
+            }
+        }
     }
 
 
@@ -503,19 +543,30 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
 
     /**
      * 封装分页数据
-     * @param pageNum
-     * @param pageSize
-     * @param userId
-     * @return
+     * 此方法用于根据用户ID获取该用户的动态列表，并根据指定的页码和页面大小进行分页
+     * 它首先构建了一个查询条件，然后根据这些条件从数据库中获取数据，最后将结果封装成一个分页对象返回
+     *
+     * @param pageNum  页码，表示请求的页面编号
+     * @param pageSize 页面大小，表示每页包含的动态数量
+     * @param userId   用户ID，表示要查询的用户的标识
+     * @return 返回一个分页对象，其中包含了动态列表和总记录数
      */
     private PageVo getPageVo(Integer pageNum, Integer pageSize, Integer userId) {
+        // 创建一个Lambda查询条件构建器
         LambdaQueryWrapper <Dynamic> queryWrapper = new LambdaQueryWrapper<>();
+        // 添加查询条件：动态属于指定用户
         queryWrapper.eq(Dynamic::getUserId, userId);
+        // 添加查询条件：动态未被删除
         queryWrapper.eq(Dynamic::getIsDeleted, SystemConstants.ARTICLE_STATUS_DRAFT);
+        // 添加排序条件：按创建时间降序排列
         queryWrapper.orderByDesc(Dynamic::getCreatedAt);
+        // 创建一个分页对象，用于封装分页查询参数
         Page<Dynamic> page = new Page<>(pageNum, pageSize);
+        // 执行分页查询
         page(page, queryWrapper);
+        // 将查询结果转换为用户动态列表VO对象
         List<UserDynamicListVO> userDynamicListVOS = BeanCopyUtils.copyBeanList(page.getRecords(), UserDynamicListVO.class);
+        // 创建并返回一个分页对象，其中包含转换后的动态列表和总记录数
         PageVo pageVo = new PageVo(userDynamicListVOS, page.getTotal());
         return pageVo;
     }

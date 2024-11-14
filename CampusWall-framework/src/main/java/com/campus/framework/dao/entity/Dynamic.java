@@ -12,7 +12,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
  * 用户动态表(Dynamic)表实体类
  *
  * @author makejava
- * @since 2024-11-03 15:30:13
+ * @since 2024-11-14 15:38:31
  */
 @SuppressWarnings("serial")
 @Data
@@ -45,18 +45,20 @@ public class Dynamic  {
     private Integer isDeleted;
     //是否置顶  “0”否 “1”是 默认为否    
     private Integer isTop;
+    //是否仅自己可见 (0: 不是, 1: 是)    
+    private Integer isPrivate;
     //浏览次数    
     private Integer viewCount;
     //点赞次数    
     private Integer likeCount;
-    //收藏次数
+    //收藏次数    
     private Integer favoriteCount;
     //评论次数    
     private Integer commentCount;
-    //创建时间    
-    private Date createdAt;
     //更新时间    
     private Date updatedAt;
+    //创建时间    
+    private Date createdAt;
     //创建人ID    
     private Long createdBy;
     //更新人ID    
