@@ -27,4 +27,6 @@ public interface DynamicService extends IService<Dynamic> {
     ResponseResult selectByDynamicSummary(String dynamicSummary, Integer pageNum, Integer pageSize);
 
     ResponseResult updateGetDynamic(Integer dynamicId);
+
+    ResponseResult deleteDynamic(Integer dynamicId);
 }

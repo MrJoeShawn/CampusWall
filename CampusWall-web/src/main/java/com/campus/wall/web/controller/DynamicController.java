@@ -148,8 +148,23 @@ public class DynamicController {
         return dynamicService.selectByDynamicSummary(dynamicSummary,pageNum,pageSize);
     }
 
+    /**
+     * 展示要修改的动态
+     * @param dynamicId
+     * @return
+     */
     @GetMapping("/update/{dynamicId}")
     public ResponseResult updateGetDynamic(@PathVariable Integer dynamicId) {
         return dynamicService.updateGetDynamic(dynamicId);
+    }
+
+    /**
+     * 删除动态
+     * @param dynamicId
+     * @return
+     */
+    @PutMapping("/delete")
+    public ResponseResult deleteDynamic(@RequestParam Integer dynamicId) {
+        return dynamicService.deleteDynamic(dynamicId);
     }
 }

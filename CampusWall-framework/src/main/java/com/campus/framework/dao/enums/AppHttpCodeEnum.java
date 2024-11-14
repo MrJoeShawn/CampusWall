@@ -41,6 +41,9 @@ public enum AppHttpCodeEnum {
     CONTENT_NOT_EMPTY(613, "搜索内容不能为空"),
     // 查询动态时发生错误
     QUERY_DYNAMIC_ERROR(614, "查询动态时发生错误"),
+    // 动态已经删除
+    DYNAMIC_DELETED(615, "动态已经删除"),
+
     ;
 
 

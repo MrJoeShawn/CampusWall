@@ -380,6 +380,29 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
         return ResponseResult.okResult(dynamicVO);
     }
 
+    @Override
+    public ResponseResult deleteDynamic(Integer dynamicId) {
+        // 先检查 dynamicId 是否存在
+        Dynamic dynamic = getById(dynamicId);
+        if (dynamic == null) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.DYNAMIC_NOT_FOUND);
+        }
+
+        if (dynamic.getIsDeleted() == 1) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.DYNAMIC_DELETED);
+        }
+
+        // 设置为已删除
+        dynamic.setIsDeleted(1);
+
+        // 更新操作
+        boolean updated = updateById(dynamic);
+
+        // 删除成功，返回成功的响应
+        return ResponseResult.okResult();
+    }
+
+
 
     /**
      * 获取用户信息视图对象
