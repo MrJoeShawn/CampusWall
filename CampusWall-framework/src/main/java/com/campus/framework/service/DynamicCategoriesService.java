@@ -15,7 +15,8 @@ public interface DynamicCategoriesService extends IService<DynamicCategories> {
 
     ResponseResult getCategoryList();
 
-
     ResponseResult getAllCategoryList();
+
+    ResponseResult getCampusAnnouncementsList();
 }
 

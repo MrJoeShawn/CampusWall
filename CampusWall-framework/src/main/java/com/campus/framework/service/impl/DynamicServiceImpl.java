@@ -535,7 +535,6 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
           newDynamic.setIsTop(SystemConstants.ARTICLE_STATUS_TOP);
           updateById(newDynamic); // 更新数据库
 
-
           DynamicVO newDynamicVO = BeanCopyUtils.copyBean(newDynamic, DynamicVO.class);
           // 返回结果
           return ResponseResult.okResult(newDynamicVO);

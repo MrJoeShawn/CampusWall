@@ -34,4 +34,13 @@ public class DynamicCategoriesController {
     public ResponseResult getAllCategoryList() {
         return dynamicCategoriesService.getAllCategoryList();
     }
+
+    /**
+     * 首页展示校园公告
+     * @return
+     */
+    @GetMapping("/getCampusAnnouncements")
+    public ResponseResult getCampusAnnouncements(){
+        return dynamicCategoriesService.getCampusAnnouncementsList();
+    }
 }

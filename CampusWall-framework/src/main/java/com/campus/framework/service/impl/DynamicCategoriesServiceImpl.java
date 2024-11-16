@@ -1,6 +1,7 @@
 package com.campus.framework.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.campus.framework.constants.SystemConstants;
 import com.campus.framework.dao.entity.Dynamic;
@@ -8,6 +9,7 @@ import com.campus.framework.dao.entity.DynamicTags;
 import com.campus.framework.dao.mapper.DynamicTagsMapper;
 import com.campus.framework.dao.repository.ResponseResult;
 import com.campus.framework.dao.vo.DynamicCategoriesVo;
+import com.campus.framework.dao.vo.DynamicListVO;
 import com.campus.framework.service.DynamicCategoriesService;
 import com.campus.framework.service.DynamicService;
 import com.campus.framework.untils.BeanCopyUtils;
@@ -70,5 +72,23 @@ public class DynamicCategoriesServiceImpl extends ServiceImpl<DynamicCategoriesM
     public ResponseResult getAllCategoryList() {
         List<DynamicCategories> dynamicCategories = dynamicCategoriesMapper.selectList(null);
         return ResponseResult.okResult(dynamicCategories);
+    }
+
+    /**
+     * 首页展示校园公告
+     * @return
+     */
+    @Override
+    public ResponseResult getCampusAnnouncementsList() {
+        LambdaQueryWrapper<Dynamic> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Dynamic::getIsDeleted, SystemConstants.ARTICLE_STATUS_NOTDELETED);
+        queryWrapper.eq(Dynamic::getIsDraft, SystemConstants.ARTICLE_STATUS_NOTDRAFT);
+        queryWrapper.eq(Dynamic::getIsPrivate, SystemConstants.DYNAMIC_STATUS_PUBLIC);
+        queryWrapper.eq(Dynamic::getCategoryId,7);
+        queryWrapper.last("LIMIT 6");
+        List<Dynamic> dynamics = dynamicService.list(queryWrapper);
+        // 使用 BeanCopyUtils 进行对象转换
+        List<DynamicListVO> dynamicsListVo = BeanCopyUtils.copyBeanList(dynamics, DynamicListVO.class);
+        return ResponseResult.okResult(dynamicsListVo);
     }
 }
