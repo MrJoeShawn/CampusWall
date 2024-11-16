@@ -44,8 +44,9 @@ public class DynamicCategoriesServiceImpl extends ServiceImpl<DynamicCategoriesM
     public ResponseResult getCategoryList() {
         //查询动态列表 状态为以发布的动态
         LambdaQueryWrapper<Dynamic> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Dynamic::getIsDraft, SystemConstants.ARTICLE_STATUS_DRAFT);
-        queryWrapper.eq(Dynamic::getIsDeleted, SystemConstants.ARTICLE_STATUS_NORMAL);
+        queryWrapper.eq(Dynamic::getIsDraft, SystemConstants.ARTICLE_STATUS_NOTDRAFT);
+        queryWrapper.eq(Dynamic::getIsDeleted, SystemConstants.ARTICLE_STATUS_NOTDELETED);
+        queryWrapper.eq(Dynamic::getIsPrivate,SystemConstants.DYNAMIC_STATUS_PUBLIC);
         List<Dynamic> DynamicList = dynamicService.list(queryWrapper);
         //获取动态的分类id,去重
         Set<Long> categoryid = DynamicList.stream()
