@@ -55,7 +55,8 @@ public class Dynamic  {
     private Integer favoriteCount;
     //评论次数    
     private Integer commentCount;
-    //更新时间    
+    //更新时间
+
     private Date updatedAt;
     //创建时间    
     private Date createdAt;
