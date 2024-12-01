@@ -56,7 +56,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
         // 去掉 "Bearer " 前缀获取 token
         String token = authHeader.substring(7);
-        System.out.println("Authorization Header: " + authHeader); // 调试输出
+//        System.out.println("Authorization Header: " + authHeader); // 调试输出
         Claims claims = null;
         try {
             claims = JwtUtil.parseJWT(token);

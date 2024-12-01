@@ -46,7 +46,6 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
      * @param pageSize 每页记录数
      * @return 包含动态列表及用户信息的响应结果
      */
-    @Override
     public ResponseResult getDynamicList(Integer pageNum, Integer pageSize) {
         // 创建查询条件，查询未删除且已发布的动态，按创建时间倒序排列
         LambdaQueryWrapper<Dynamic> queryWrapper = new LambdaQueryWrapper<>();
@@ -61,13 +60,19 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
 
         // 将查询结果转换为VO列表
         List<DynamicListVO> dynamicsListVo = page.getRecords().stream()
-                .map(dynamic -> BeanCopyUtils.copyBean(dynamic, DynamicListVO.class))  //map对流中的元素进行计算或转换
-                .collect(Collectors.toList()); //当前流转换成一个集合
+                .map(dynamic -> BeanCopyUtils.copyBean(dynamic, DynamicListVO.class))
+                .collect(Collectors.toList());
 
         // 使用 HashSet 来避免用户ID重复
         Set<Integer> userIds = dynamicsListVo.stream()
                 .map(DynamicListVO::getUserId)
                 .collect(Collectors.toSet());
+
+        // 如果 userIds 为空，直接返回结果
+        if (userIds.isEmpty()) {
+            PageVo pageVo = new PageVo(dynamicsListVo, page.getTotal());
+            return ResponseResult.okResult(pageVo);
+        }
 
         // 批量获取用户信息
         List<Users> users = usersService.listByIds(userIds);
@@ -79,11 +84,11 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
             Integer userId = dynamicListVO.getUserId();
             dynamicListVO.setFullName(userMap.getOrDefault(Long.valueOf(userId), "未知用户"));
         });
-        PageVo pageVo = new PageVo(dynamicsListVo, page.getTotal());
+
         // 返回封装结果
+        PageVo pageVo = new PageVo(dynamicsListVo, page.getTotal());
         return ResponseResult.okResult(pageVo);
     }
-
 
 
     /**
@@ -302,7 +307,8 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
             // 查询动态
             LambdaQueryWrapper<Dynamic> wrapper = new LambdaQueryWrapper<>();
             wrapper.like(Dynamic::getDynamicSummary, dynamicSummary)
-                    .eq(Dynamic::getIsDraft, SystemConstants.ARTICLE_STATUS_DRAFT)
+                    .eq(Dynamic::getIsDeleted,SystemConstants.ARTICLE_STATUS_NOTDELETED)
+                    .eq(Dynamic::getIsDraft, SystemConstants.ARTICLE_STATUS_NOTDRAFT)
                     .eq(Dynamic::getIsDeleted, SystemConstants.ARTICLE_STATUS_NORMAL)
                     .orderByDesc(Dynamic::getCreatedAt);
 
@@ -493,7 +499,6 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
         if (dynamic == null) {
             return ResponseResult.okResult("没有找到置顶动态", null);
         }
-
         DynamicVO dynamicVO = BeanCopyUtils.copyBean(dynamic, DynamicVO.class);
         return ResponseResult.okResult(dynamicVO);
     }
@@ -557,7 +562,9 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
         // 添加查询条件：动态属于指定用户
         queryWrapper.eq(Dynamic::getUserId, userId);
         // 添加查询条件：动态未被删除
-        queryWrapper.eq(Dynamic::getIsDeleted, SystemConstants.ARTICLE_STATUS_DRAFT);
+        queryWrapper.eq(Dynamic::getIsDeleted, SystemConstants.ARTICLE_STATUS_NOTDELETED);
+        // 添加查询条件：动态未被标记为草稿
+        queryWrapper.eq(Dynamic::getIsDraft, SystemConstants.ARTICLE_STATUS_NOTDRAFT);
         // 添加排序条件：按创建时间降序排列
         queryWrapper.orderByDesc(Dynamic::getCreatedAt);
         // 创建一个分页对象，用于封装分页查询参数

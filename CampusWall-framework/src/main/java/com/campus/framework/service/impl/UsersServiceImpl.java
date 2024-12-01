@@ -39,7 +39,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
      */
     @Override
     public ResponseResult updateUserInfo(Users users) {
-        System.out.println("updateUserInfo" + users);
+//        System.out.println("updateUserInfo" + users);
         try {
             Integer userId = SecurityUtils.getUserId();
             Users updateUser = usersMapper.selectById(userId);
