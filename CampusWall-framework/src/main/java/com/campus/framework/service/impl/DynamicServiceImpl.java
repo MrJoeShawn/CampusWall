@@ -174,10 +174,12 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
         // 将标签列表设置到 DynamicVO 对象中
         dynamicVO.setTagName(tagList);
 
+        Integer userId = SecurityUtils.getUserId();
         // 查询该用户是否喜欢该动态
         LambdaQueryWrapper<Likes> likesQueryWrapper = new LambdaQueryWrapper<>();
-        likesQueryWrapper.eq(Likes::getUserId, user.getId());
+        likesQueryWrapper.eq(Likes::getUserId, userId);
         likesQueryWrapper.eq(Likes::getDynamicId, dynamic.getDynamicId());
+        System.out.println(user.getId()+"用户名"+dynamic.getDynamicId()+"动态id" );
         // 执行查询，判断用户是否已点赞该动态
         Likes like = likesService.getOne(likesQueryWrapper); // 使用 getOne 查询单条记录
         if (like != null) {
@@ -188,7 +190,7 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
 
         //查询用户是否收藏了该动态
         LambdaQueryWrapper<Favorites> favoritesQueryWrapper = new LambdaQueryWrapper<>();
-        favoritesQueryWrapper.eq(Favorites::getUserId, user.getId());
+        favoritesQueryWrapper.eq(Favorites::getUserId, userId);
         favoritesQueryWrapper.eq(Favorites::getDynamicId, dynamic.getDynamicId());
         Favorites favorites = favoritesService.getOne(favoritesQueryWrapper);
         if (favorites != null) {
