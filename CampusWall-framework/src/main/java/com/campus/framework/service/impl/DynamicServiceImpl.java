@@ -138,8 +138,6 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
         return ResponseResult.okResult(pageVo);
     }
 
-
-
     /**
      * 根据动态 ID 获取动态详细信息
      * @param id 动态的唯一标识符
@@ -179,7 +177,6 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
         LambdaQueryWrapper<Likes> likesQueryWrapper = new LambdaQueryWrapper<>();
         likesQueryWrapper.eq(Likes::getUserId, userId);
         likesQueryWrapper.eq(Likes::getDynamicId, dynamic.getDynamicId());
-        System.out.println(user.getId()+"用户名"+dynamic.getDynamicId()+"动态id" );
         // 执行查询，判断用户是否已点赞该动态
         Likes like = likesService.getOne(likesQueryWrapper); // 使用 getOne 查询单条记录
         if (like != null) {
@@ -239,6 +236,22 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
      */
     @Override
     public ResponseResult createDynamic(DynamicVO dynamicVO) {
+        // 判断是否有 dynamicId，如果有，执行更新操作；如果没有，执行创建操作
+        if (dynamicVO.getDynamicId() != null) {
+            // 如果有 dynamicId，调用更新方法
+            return updateDynamic(dynamicVO);
+        } else {
+            // 如果没有 dynamicId，执行创建操作
+            return createNewDynamic(dynamicVO);
+        }
+    }
+
+    /**
+     * 创建新动态
+     * @param dynamicVO 动态对象
+     * @return 创建结果响应
+     */
+    private ResponseResult createNewDynamic(DynamicVO dynamicVO) {
         Integer userId = SecurityUtils.getUserId();
         dynamicVO.setUserId(userId);
 
@@ -255,6 +268,7 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
         dynamic.setCreatedBy(Long.valueOf(dynamicVO.getUserId()));
         dynamic.setUserId(userId);
 
+        // 保存新动态
         save(dynamic);
         Integer dynamicId = dynamic.getDynamicId(); // 获取新创建的动态ID
 
@@ -264,7 +278,7 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
                 .collect(Collectors.toList());
 
         // 批量查询现有标签
-        List<Tags> existingTags = tagsService.findTagsByNames(tagNames); // 批量查询
+        List<Tags> existingTags = tagsService.findTagsByNames(tagNames);
 
         // 将现有标签名称与标签对象映射到一个 Map 以便快速查找
         Map<String, Tags> tagMap = existingTags.stream()
@@ -290,6 +304,73 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
 
         return ResponseResult.okResult();
     }
+
+    /**
+     * 更新已有动态
+     * @param dynamicVO 动态对象
+     * @return 更新结果响应
+     */
+    private ResponseResult updateDynamic(DynamicVO dynamicVO) {
+        Integer userId = SecurityUtils.getUserId();
+        dynamicVO.setUserId(userId);
+
+        // 查找现有动态
+        Dynamic existingDynamic = getById(dynamicVO.getDynamicId());
+        if (existingDynamic == null) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.DYNAMIC_NOT_FOUND, "动态不存在");
+        }
+
+        // 处理标签
+        // 删除原有的标签关系
+        dynamicTagsService.removeByDynamicId(dynamicVO.getDynamicId());
+
+        // 更新动态信息
+        existingDynamic.setDynamicSummary(dynamicVO.getDynamicSummary());
+        existingDynamic.setDynamicCover(dynamicVO.getDynamicCover());
+        existingDynamic.setDynamicContent(dynamicVO.getDynamicContent());
+        existingDynamic.setCleanedPostContent(dynamicVO.getCleanedPostContent());
+        existingDynamic.setCategoryId(dynamicVO.getCategoryId());
+        existingDynamic.setIsAnonymous(dynamicVO.getIsAnonymous());
+        existingDynamic.setAllowComments(dynamicVO.getAllowComments());
+        existingDynamic.setIsDraft(dynamicVO.getIsDraft());
+        existingDynamic.setUpdatedBy(Long.valueOf(dynamicVO.getUserId()));
+
+        // 更新数据库中的动态信息
+        updateById(existingDynamic);
+
+        // 获取前端传来的标签名称列表
+        List<String> tagNames = dynamicVO.getTagName().stream()
+                .map(Tags::getTagName)
+                .collect(Collectors.toList());
+
+        // 批量查询现有标签
+        List<Tags> existingTags = tagsService.findTagsByNames(tagNames);
+
+        // 将现有标签名称与标签对象映射到一个 Map 以便快速查找
+        Map<String, Tags> tagMap = existingTags.stream()
+                .collect(Collectors.toMap(Tags::getTagName, tag -> tag));
+
+        // 重新添加标签关系
+        for (String tagName : tagNames) {
+            Tags existingTag = tagMap.get(tagName); // 从 Map 中获取标签
+
+            if (existingTag == null) {
+                // 标签不存在，创建新标签
+                existingTag = new Tags();
+                existingTag.setTagName(tagName);
+                tagsService.save(existingTag); // 保存新标签
+            }
+
+            // 添加动态与标签的关系
+            DynamicTags dynamicTag = new DynamicTags();
+            dynamicTag.setDynamicId(Long.valueOf(dynamicVO.getDynamicId()));
+            dynamicTag.setTagId(existingTag.getTagId());
+            dynamicTagsService.save(dynamicTag); // 保存关系
+        }
+
+        return ResponseResult.okResult();
+    }
+
 
     /**
      * 根据摘要搜索动态
@@ -385,7 +466,6 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
                 .collect(Collectors.toList());
         // 将标签列表设置到 DynamicVO 对象中
         dynamicVO.setTagName(tagList);
-
         return ResponseResult.okResult(dynamicVO);
     }
 

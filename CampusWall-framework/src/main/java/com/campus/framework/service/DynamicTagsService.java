@@ -14,5 +14,7 @@ import com.campus.framework.dao.repository.ResponseResult;
 public interface DynamicTagsService extends IService<DynamicTags> {
 
     ResponseResult getTagsList();
+
+    void removeByDynamicId(Integer dynamicId);
 }
 
