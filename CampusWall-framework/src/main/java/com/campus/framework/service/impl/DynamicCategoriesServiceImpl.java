@@ -84,7 +84,7 @@ public class DynamicCategoriesServiceImpl extends ServiceImpl<DynamicCategoriesM
         queryWrapper.eq(Dynamic::getIsDeleted, SystemConstants.ARTICLE_STATUS_NOTDELETED);
         queryWrapper.eq(Dynamic::getIsDraft, SystemConstants.ARTICLE_STATUS_NOTDRAFT);
         queryWrapper.eq(Dynamic::getIsPrivate, SystemConstants.DYNAMIC_STATUS_PUBLIC);
-        queryWrapper.eq(Dynamic::getCategoryId,7);
+        queryWrapper.eq(Dynamic::getCategoryId,21);
         queryWrapper.last("LIMIT 6");
         List<Dynamic> dynamics = dynamicService.list(queryWrapper);
         // 使用 BeanCopyUtils 进行对象转换
