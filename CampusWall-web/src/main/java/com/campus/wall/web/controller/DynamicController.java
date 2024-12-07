@@ -96,7 +96,7 @@ public class DynamicController {
     @GetMapping("/user/profile/dynamics")
     public ResponseResult getDynamicByUserId(Integer pageNum, Integer pageSize) {
         Integer userId = SecurityUtils.getUserId();
-        return dynamicService.getDynamicListByUserId(pageNum, pageSize,userId);
+        return dynamicService.getDynamicListByUserIdToToken(pageNum, pageSize, userId);
     }
 
 

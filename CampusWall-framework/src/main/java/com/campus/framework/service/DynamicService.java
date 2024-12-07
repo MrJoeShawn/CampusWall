@@ -31,4 +31,6 @@ public interface DynamicService extends IService<Dynamic> {
     ResponseResult deleteDynamic(Integer dynamicId);
 
     ResponseResult updatePrivate(Integer dynamicId);
+
+    ResponseResult getDynamicListByUserIdToToken(Integer pageNum, Integer pageSize, Integer userId);
 }
