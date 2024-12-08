@@ -563,27 +563,33 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
     @Override
     public ResponseResult getDynamicListByUserId(Integer pageNum, Integer pageSize, Integer userId) {
         // 创建一个Lambda查询条件构建器
-        LambdaQueryWrapper <Dynamic> queryWrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<Dynamic> queryWrapper = new LambdaQueryWrapper<>();
         // 添加查询条件：动态属于指定用户
         queryWrapper.eq(Dynamic::getUserId, userId);
         // 添加查询条件：动态未被删除
         queryWrapper.eq(Dynamic::getIsDeleted, SystemConstants.ARTICLE_STATUS_NOTDELETED);
         // 添加查询条件：动态未被标记为草稿
         queryWrapper.eq(Dynamic::getIsDraft, SystemConstants.ARTICLE_STATUS_NOTDRAFT);
-        // 添加查询条件：动态未被标记为私有
-        queryWrapper.eq(Dynamic::getIsPrivate, SystemConstants.DYNAMIC_STATUS_PRIVATE);
+        // 添加查询条件：动态应为公开状态
+        queryWrapper.eq(Dynamic::getIsPrivate, SystemConstants.DYNAMIC_STATUS_PUBLIC);
         // 添加排序条件：按创建时间降序排列
         queryWrapper.orderByDesc(Dynamic::getCreatedAt);
+
         // 创建一个分页对象，用于封装分页查询参数
         Page<Dynamic> page = new Page<>(pageNum, pageSize);
+
         // 执行分页查询
         page(page, queryWrapper);
+
         // 将查询结果转换为用户动态列表VO对象
         List<UserDynamicListVO> userDynamicListVOS = BeanCopyUtils.copyBeanList(page.getRecords(), UserDynamicListVO.class);
+
         // 创建并返回一个分页对象，其中包含转换后的动态列表和总记录数
         PageVo pageVo = new PageVo(userDynamicListVOS, page.getTotal());
+
         return ResponseResult.okResult(pageVo);
     }
+
 
     /**
      * 根据用户id获取动态列表 个人主页动态 从token中获取用户id
