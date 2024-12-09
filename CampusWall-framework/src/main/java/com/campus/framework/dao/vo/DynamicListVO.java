@@ -22,4 +22,12 @@ public class DynamicListVO {
     private Date createdAt;
     //全名
     private String fullName;
+    //浏览次数
+    private Integer viewCount;
+    //点赞次数
+    private Integer likeCount;
+    //收藏次数
+    private Integer favoriteCount;
+    //评论次数
+    private Integer commentCount;
 }

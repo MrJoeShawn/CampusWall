@@ -177,4 +177,14 @@ public class DynamicController {
     public ResponseResult updatePrivate(@RequestParam Integer dynamicId) {
         return dynamicService.updatePrivate(dynamicId);
     }
+
+    /**
+     * 浏览量+1
+     * @param dynamicId
+     * @return
+     */
+    @PatchMapping("/{dynamicId}/viewcount")
+    public ResponseResult addViewCount(@PathVariable("dynamicId")  Integer dynamicId) {
+        return dynamicService.addViewCount(dynamicId);
+    }
 }

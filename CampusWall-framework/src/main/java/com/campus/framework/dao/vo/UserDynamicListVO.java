@@ -22,6 +22,14 @@ public class UserDynamicListVO {
     private String cleanedPostContent;
     //动态封面URL
     private String dynamicCover;
+    //浏览次数
+    private Integer viewCount;
+    //点赞次数
+    private Integer likeCount;
+    //收藏次数
+    private Integer favoriteCount;
+    //评论次数
+    private Integer commentCount;
     //发布时间
     private Date createdAt;
     //是否匿名发布 “0”否 “1”是 默认为否

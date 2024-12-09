@@ -617,6 +617,22 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
     }
 
     /**
+     * 增加浏览量
+     * @param dynamicId
+     * @return
+     */
+    @Override
+    public ResponseResult addViewCount(Integer dynamicId) {
+        Dynamic dynamic = getById(dynamicId);
+        if (dynamic != null) {
+            dynamic.setViewCount(dynamic.getViewCount() + 1);
+            updateById(dynamic);
+            return ResponseResult.okResult("浏览量+1");
+        }
+        return ResponseResult.errorResult(AppHttpCodeEnum.DYNAMIC_NOT_FOUND);
+    }
+
+    /**
      * 获取置顶动态 用户点击自己主页
      * @return
      */
