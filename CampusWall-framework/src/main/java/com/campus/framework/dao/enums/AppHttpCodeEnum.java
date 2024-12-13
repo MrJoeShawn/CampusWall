@@ -9,6 +9,8 @@ public enum AppHttpCodeEnum {
     SUCCESS(200, "操作成功"),
     // 登录
     NEED_LOGIN(401, "需要登录后操作"),
+    TOKEN_EXPIRED(401, "Token 已过期，请重新登录"),
+    REDIS_EXPIRED(401, "登录信息已失效，请重新登录"),
     // 权限
     NO_OPERATOR_AUTH(403, "无权限操作"),
     // 服务器错误

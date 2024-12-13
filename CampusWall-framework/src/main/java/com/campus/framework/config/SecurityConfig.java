@@ -74,6 +74,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/creatrdynamic").authenticated()           // 创建动态
                 .antMatchers("/like").authenticated()                    // 喜欢动态
                 .antMatchers("/collect").authenticated()                 // 收藏动态
+                .antMatchers("/dynamic/**").authenticated()              // 查看动态
+                .antMatchers("/comment").authenticated()
                 // 其他所有请求默认允许
                 .anyRequest().permitAll();
 

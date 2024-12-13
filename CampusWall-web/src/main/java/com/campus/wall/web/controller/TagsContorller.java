@@ -16,6 +16,10 @@ public class TagsContorller {
     @Autowired
     DynamicTagsService dynamicTagsService;
 
+    /**
+     * 获取所有标签
+     * @return
+     */
     @GetMapping("/getTagsList")
     public ResponseResult getTagsList() {
         return dynamicTagsService.getTagsList();

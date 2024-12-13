@@ -20,7 +20,9 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
-    @ApiOperation(value = "登录")
+    /**
+     * 登录接口
+     */
     @PostMapping("/login")
     public ResponseResult login (@RequestBody Users users){
         if(!StringUtils.hasText(users.getUsername())){
@@ -28,7 +30,10 @@ public class LoginController {
         }
         return loginService.login(users);
     }
-    @ApiOperation(value = "退出登录")
+
+    /**
+     * 退出登录接口
+     */
     @PostMapping("/logout")
     public ResponseResult logout(){
         return loginService.logout();

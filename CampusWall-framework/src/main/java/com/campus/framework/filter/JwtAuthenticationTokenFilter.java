@@ -8,6 +8,7 @@ import com.campus.framework.untils.JwtUtil;
 import com.campus.framework.untils.RedisCache;
 import com.campus.framework.untils.WebUtils;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,48 +47,41 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // 获取请求头中的 Authorization
         String authHeader = request.getHeader("Authorization");
-        // 如果 Authorization 为空或者不以 "Bearer " 开头，直接放行
         if (!StringUtils.hasText(authHeader) || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 去掉 "Bearer " 前缀获取 token
         String token = authHeader.substring(7);
-//        System.out.println("Authorization Header: " + authHeader); // 调试输出
-        Claims claims = null;
+        Claims claims;
         try {
             claims = JwtUtil.parseJWT(token);
-        } catch (Exception e) {
+        } catch (ExpiredJwtException e) { // JWT Token 过期
             e.printStackTrace();
-            // 解析 Token 失败，返回需要登录的响应
+            ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.TOKEN_EXPIRED);
+            WebUtils.renderString(response, JSON.toJSONString(result));
+            return;
+        } catch (Exception e) { // 其他解析失败情况
+            e.printStackTrace();
             ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
             WebUtils.renderString(response, JSON.toJSONString(result));
             return;
         }
 
-        // 获取 Token 中的用户 ID
         String userId = claims.getSubject();
-        // 从 Redis 中获取登录用户信息
         LoginUser loginUser = redisCache.getCacheObject("login:" + userId);
 
-        // 如果 Redis 中没有找到用户信息，说明 token 已经过期
-        if (Objects.isNull(loginUser)) {
-            // 返回需要登录的响应
-            ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
+        if (Objects.isNull(loginUser)) { // Redis 中没有用户信息
+            ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.REDIS_EXPIRED);
             WebUtils.renderString(response, JSON.toJSONString(result));
             return;
         }
 
-        // 设置 Authentication 对象，Spring Security 会从这里判断是否已认证
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
-
-        // 将认证信息放入 Security 上下文中
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        // 继续执行请求的处理
         filterChain.doFilter(request, response);
     }
+
 }
