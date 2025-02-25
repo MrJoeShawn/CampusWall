@@ -18,5 +18,9 @@ public interface DynamicCategoriesService extends IService<DynamicCategories> {
     ResponseResult getAllCategoryList();
 
     ResponseResult getCampusAnnouncementsList();
+
+    ResponseResult getAdminCampusAnnouncementsList(Integer pageNum,Integer pageSize);
+
+    ResponseResult updateTopDynamics(Integer dynamicId,Integer isTop);
 }
 

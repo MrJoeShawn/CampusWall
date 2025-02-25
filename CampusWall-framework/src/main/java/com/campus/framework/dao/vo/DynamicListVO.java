@@ -22,6 +22,8 @@ public class DynamicListVO {
     private Date createdAt;
     //全名
     private String fullName;
+    //头像URL
+    private String profilePictureUrl;
     //浏览次数
     private Integer viewCount;
     //点赞次数
@@ -30,4 +32,6 @@ public class DynamicListVO {
     private Integer favoriteCount;
     //评论次数
     private Integer commentCount;
+    //是否置顶  “0”否 “1”是 默认为否
+    private Integer isTop;
 }
