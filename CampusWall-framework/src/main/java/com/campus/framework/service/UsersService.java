@@ -15,5 +15,7 @@ public interface UsersService extends IService<Users> {
     ResponseResult getUserInfo();
 
     ResponseResult updateUserInfo(Users users);
+
+    ResponseResult getAllUserInfo(Integer pageNum, Integer pageSize);
 }
 

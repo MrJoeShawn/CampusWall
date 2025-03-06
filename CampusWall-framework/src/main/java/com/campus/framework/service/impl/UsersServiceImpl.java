@@ -1,5 +1,7 @@
 package com.campus.framework.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.campus.framework.dao.enums.AppHttpCodeEnum;
 import com.campus.framework.dao.mapper.UsersMapper;
@@ -66,6 +68,30 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
         } catch (Exception e) {
             log.error("更新用户信息失败", e);
             return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR, "更新用户信息失败");
+        }
+    }
+
+
+    @Override
+    public ResponseResult getAllUserInfo(Integer pageNum, Integer pageSize) {
+        try {
+            // 1. 使用 MyBatis-Plus 的分页对象
+            IPage<Users> page = new Page<>(pageNum, pageSize);
+
+            // 2. 执行分页查询
+            IPage<Users> userPage = usersMapper.selectPage(page, null);
+
+            // 3. 判断数据是否为空
+            if (userPage.getRecords().isEmpty()) {
+                log.warn("未找到任何用户信息");
+                return ResponseResult.errorResult(AppHttpCodeEnum.DATA_NOT_FOUND, "未找到任何用户信息");
+            }
+
+            // 4. 返回分页数据
+            return ResponseResult.okResult(userPage);
+        } catch (Exception e) {
+            log.error("查询所有用户信息失败", e);
+            return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR, "查询用户信息失败");
         }
     }
 

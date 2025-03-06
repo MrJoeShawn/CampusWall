@@ -7,4 +7,6 @@ public interface LoginService {
     ResponseResult logout();
 
     ResponseResult login(Users users);
+
+    ResponseResult register(Users users);
 }

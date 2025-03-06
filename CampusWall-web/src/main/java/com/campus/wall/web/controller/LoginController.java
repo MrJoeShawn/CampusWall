@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@Api(tags = "登录接口")
 public class LoginController {
 
     @Autowired
@@ -37,5 +36,14 @@ public class LoginController {
     @PostMapping("/logout")
     public ResponseResult logout(){
         return loginService.logout();
+    }
+
+
+    /**
+     * 用户注册
+     */
+    @PostMapping("/register")
+    public ResponseResult register(@RequestBody Users users) {
+        return loginService.register(users);
     }
 }
