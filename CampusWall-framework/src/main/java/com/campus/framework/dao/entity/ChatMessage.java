@@ -1,6 +1,8 @@
 package com.campus.framework.dao.entity;
-import java.util.Date;
+import lombok.Data;
 import java.io.Serializable;
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +23,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 public class ChatMessage  {
     //消息ID
     @TableId
-    private Long id;
+    private Integer id;
     //会话ID    
     private String conversationId;
     //发送者ID    

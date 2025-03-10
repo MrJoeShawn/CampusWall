@@ -12,20 +12,7 @@ import java.util.List;
 @Service
 public class ChatMessageServiceImpl implements ChatMessageService {
 
-    @Autowired
-    private ChatMessageMapper chatMessageMapper;
 
-    @Override
-    public void saveMessage(ChatMessage chatMessage) {
-        chatMessage.setSentTime(new Date());  // 设置消息时间
-        chatMessage.setStatus(0);  // 默认状态为 "sent"
-        chatMessageMapper.insertMessage(chatMessage);
-    }
-
-    @Override
-    public List<ChatMessage> getChatHistory(String conversationId) {
-        return chatMessageMapper.getMessagesByConversation(conversationId);
-    }
 }
 
 
