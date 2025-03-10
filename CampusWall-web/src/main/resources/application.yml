@@ -7,6 +7,8 @@ spring:
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
+  websocket:
+    enabled: true
 
   servlet:
     multipart:
@@ -26,6 +28,7 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
       id-type: auto
+
 springfox:
   documentation:
     swagger:
@@ -40,4 +43,5 @@ knife4j:
 oss:
   accessKey: jWoUFwaUESo2Pg1d9JG4x5JP9iVmiyMJxj9LYy4H
   secretKey: ycm6cnrCu35aTOCUZmQ4tT0YAfBiVrXbL6TXRFHe
-  bucket: campus-wall-1
+  bucket: campus-wall-02
+
