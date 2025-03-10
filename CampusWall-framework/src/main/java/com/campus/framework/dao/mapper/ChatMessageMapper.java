@@ -18,12 +18,6 @@ import java.util.List;
 @Mapper
 public interface ChatMessageMapper {
 
-    @Insert("INSERT INTO chat_message (sender_id, receiver_id, content, sent_time, conversation_id, status) " +
-            "VALUES (#{senderId}, #{receiverId}, #{content}, #{sentTime}, #{conversationId}, #{status})")
-    void insertMessage(ChatMessage chatMessage);
-
-    @Select("SELECT * FROM chat_message WHERE conversation_id = #{conversationId} ORDER BY sent_time ASC")
-    List<ChatMessage> getMessagesByConversation(@Param("conversationId") String conversationId);
 }
 
 
