@@ -23,7 +23,6 @@ public class DynamicController {
      */
     @PostMapping("/create")
     public ResponseResult createDynamic(@RequestBody DynamicVO dynamicVO) {
-        System.out.println("dynamic = " + dynamicVO);
         return dynamicService.createDynamic(dynamicVO);
     }
 

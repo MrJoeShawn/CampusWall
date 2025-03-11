@@ -16,8 +16,9 @@ import java.util.List;
  * @since 2025-03-09 19:25:19
  */
 @Mapper
-public interface ChatMessageMapper {
-
+public interface ChatMessageMapper extends BaseMapper<ChatMessage> {
 }
+
+
 
 
