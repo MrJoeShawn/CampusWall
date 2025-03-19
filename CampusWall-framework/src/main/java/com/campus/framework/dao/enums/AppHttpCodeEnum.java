@@ -51,8 +51,10 @@ public enum AppHttpCodeEnum {
     DYNAMIC_PUBLIC(617, "公开可见"),
     // 动态更新失败
     DYNAMIC_UPDATE_FAILED(618, "动态更新失败"),
-    DATA_NOT_FOUND(619, "数据不存在")
-    ;
+    // 数据不存在
+    DATA_NOT_FOUND(619, "数据不存在"),
+    // 用户已存在
+    USER_ALREADY_EXISTS(620, "用户已存在");
 
 
     // 状态码

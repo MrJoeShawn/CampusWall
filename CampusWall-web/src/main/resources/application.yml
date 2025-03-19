@@ -43,5 +43,5 @@ knife4j:
 oss:
   accessKey: jWoUFwaUESo2Pg1d9JG4x5JP9iVmiyMJxj9LYy4H
   secretKey: ycm6cnrCu35aTOCUZmQ4tT0YAfBiVrXbL6TXRFHe
-  bucket: campus-wall-02
+  bucket: campus-wall-01
 

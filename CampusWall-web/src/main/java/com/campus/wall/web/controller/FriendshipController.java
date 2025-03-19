@@ -33,6 +33,15 @@ public class FriendshipController {
         return ResponseEntity.ok("好友请求已发送");
     }
 
+    // 获取好友请求列表
+    @GetMapping("/requests")
+    public ResponseEntity<List<UserInfoVo>> getFriendRequests() {
+        Integer userId = SecurityUtils.getUserId();
+        List<UserInfoVo> requests = friendshipService.getPendingFriendRequests(userId);
+        return ResponseEntity.ok(requests);
+    }
+
+
     // 处理好友请求（接受/拒绝）
     @PostMapping("/handleRequest")
     public ResponseEntity<String> handleFriendRequest(@RequestParam Integer friendId, @RequestParam boolean accept) {

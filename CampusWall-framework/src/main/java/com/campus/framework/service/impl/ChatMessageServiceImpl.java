@@ -33,6 +33,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         chatMessageMapper.insert(chatMessage);
     }
 
+    // 根据用户ID和好友ID获取聊天记录
     @Override
     public List<ChatMessage> getChatHistory(Long userId, Long friendId) {
         // 构造会话ID
@@ -46,5 +47,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                 .orderByAsc("sent_time"));
     }
 }
+
+
 
 

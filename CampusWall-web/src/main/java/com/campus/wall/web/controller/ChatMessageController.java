@@ -24,13 +24,14 @@ public class ChatMessageController {
         return chatMessageService.getChatHistory(Long.valueOf(userId), friendId);
     }
 
+
     // 保存聊天记录
     @PostMapping("/send")
     public ResponseEntity<Void> sendMessage(@RequestBody ChatMessage chatMessage) {
         Integer userId = SecurityUtils.getUserId();  // 获取当前登录用户ID
-        chatMessage.setSenderId(userId);  // 设置当前用户为发送者
-        chatMessage.setSentTime(new Date());  // 设置当前时间为发送时间
-        chatMessageService.saveChatMessage(chatMessage);
+//        chatMessage.setSenderId(Long.valueOf(userId));  // 设置当前用户为发送者
+//        chatMessage.setSentTime(new Date());  // 设置当前时间为发送时间
+//        chatMessageService.saveChatMessage(chatMessage);
         return ResponseEntity.ok().build();
     }
 }

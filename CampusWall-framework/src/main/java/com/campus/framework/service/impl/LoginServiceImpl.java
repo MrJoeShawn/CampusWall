@@ -41,6 +41,11 @@ public class LoginServiceImpl implements LoginService {
     private PasswordEncoder passwordEncoder; // Spring Security 提供的密码加密工具
 
 
+    /**
+     * 用户登录
+     * @param users
+     * @return
+     */
     @Override
     public ResponseResult login(Users users) {
         // 创建包含用户名和密码的认证令牌

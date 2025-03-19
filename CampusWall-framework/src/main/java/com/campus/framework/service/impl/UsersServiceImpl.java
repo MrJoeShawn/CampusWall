@@ -1,5 +1,6 @@
 package com.campus.framework.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -72,6 +73,12 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
     }
 
 
+    /**
+     * 管理员获取所有用户信息
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
     @Override
     public ResponseResult getAllUserInfo(Integer pageNum, Integer pageSize) {
         try {
@@ -94,6 +101,97 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
             return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR, "查询用户信息失败");
         }
     }
+
+    /**
+     * 添加用户
+     * @param user
+     * @return
+     */
+    @Override
+    public ResponseResult addUser(Users user) {
+        try {
+            // 验证用户信息是否已存在，例如检查用户名或邮箱是否重复
+            QueryWrapper<Users> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("username", user.getUsername()).or().eq("email", user.getEmail());
+            Users existingUser = usersMapper.selectOne(queryWrapper);
+
+            if (existingUser != null) {
+                return ResponseResult.errorResult(AppHttpCodeEnum.USER_ALREADY_EXISTS, "用户名或邮箱已存在");
+            }
+
+            // 设置默认值（例如账户启用状态）
+            user.setEnabled(1);
+            user.setAccountNonExpired(1);
+            user.setCredentialsNonExpired(1);
+            user.setAccountNonLocked(1);
+
+            // 插入用户数据
+            int result = usersMapper.insert(user);
+            if (result > 0) {
+                return ResponseResult.okResult("用户添加成功");
+            } else {
+                return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR, "添加用户失败");
+            }
+        } catch (Exception e) {
+            log.error("添加用户失败", e);
+            return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR, "添加用户失败");
+        }
+    }
+
+    /**
+     * 删除用户
+     * @param id
+     * @return
+     */
+    @Override
+    public ResponseResult deleteUser(Integer id) {
+        try {
+            // 查找用户
+            Users user = usersMapper.selectById(id);
+            if (user == null) {
+                return ResponseResult.errorResult(AppHttpCodeEnum.DATA_NOT_FOUND, "用户不存在");
+            }
+
+            // 删除用户
+            int result = usersMapper.deleteById(id);
+            if (result > 0) {
+                return ResponseResult.okResult("用户删除成功");
+            } else {
+                return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR, "删除用户失败");
+            }
+        } catch (Exception e) {
+            log.error("删除用户失败", e);
+            return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR, "删除用户失败");
+        }
+    }
+
+    /**
+     * 更新用户信息
+     * @param user
+     * @return
+     */
+    @Override
+    public ResponseResult updateUser(Users user) {
+        try {
+            // 查找用户
+            Users existingUser = usersMapper.selectById(user.getId());
+            if (existingUser == null) {
+                return ResponseResult.errorResult(AppHttpCodeEnum.DATA_NOT_FOUND, "用户不存在");
+            }
+
+            // 更新用户信息
+            int result = usersMapper.updateById(user);
+            if (result > 0) {
+                return ResponseResult.okResult("用户信息更新成功");
+            } else {
+                return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR, "更新用户信息失败");
+            }
+        } catch (Exception e) {
+            log.error("更新用户信息失败", e);
+            return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR, "更新用户信息失败");
+        }
+    }
+
 
 
     /**
