@@ -166,4 +166,18 @@ public class FriendshipServiceImpl extends ServiceImpl<FriendshipMapper, Friends
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public boolean isFriend(Integer userId, Integer friendId) {
+        // 查询数据库看是否存在两个用户之间的已接受的好友关系
+        Friendship friendship1 = friendshipMapper.selectFriendshipStatus(userId, friendId);
+        Friendship friendship2 = friendshipMapper.selectFriendshipStatus(friendId, userId);
+
+        System.out.println("friendship1: " + friendship1); // 输出 friendship1
+        System.out.println("friendship2: " + friendship2); // 输出 friendship2
+
+        // 判断任一关系为"已接受"
+        return (friendship1 != null && "accepted".equals(friendship1.getStatus())) ||
+                (friendship2 != null && "accepted".equals(friendship2.getStatus()));
+    }
+
 }

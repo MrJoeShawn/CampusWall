@@ -6,6 +6,7 @@ import lombok.experimental.Accessors;
 import java.util.Date;
 import java.util.List;
 
+
 @Data
 @Accessors(chain = true)
 public class UserInfoVo {
@@ -17,6 +18,9 @@ public class UserInfoVo {
     private String email;
     //电话号码
     private String phoneNumber;
+
+
+
     //全名
     private String fullName;
     //性别  '男-1','女-0','其他-2'
@@ -33,4 +37,13 @@ public class UserInfoVo {
     private String major;
     //热门动态
     private List hotDynamic;
+    // 是否为好友
+    private boolean isFriend;  // 属性名保持小写的isFriend
+    public boolean isFriend() {
+        return isFriend;
+    }
+
+    public void setFriend(boolean friend) {
+        isFriend = friend;
+    }
 }

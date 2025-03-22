@@ -16,5 +16,7 @@ public interface FriendshipService {
     void deleteFriend(Integer userId, Integer friendId);
 
     List<UserInfoVo> getPendingFriendRequests(Integer userId);
+
+    boolean isFriend(Integer currentUserId, Integer userId);
 }
 

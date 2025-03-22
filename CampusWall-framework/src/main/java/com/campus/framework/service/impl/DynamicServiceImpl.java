@@ -40,6 +40,9 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
     @Lazy
     FavoritesService favoritesService;
 
+    @Autowired
+    FriendshipService friendshipService;
+
     /**
      * 首页获取动态列表
      * @param pageNum 页码
@@ -207,14 +210,27 @@ public class DynamicServiceImpl extends ServiceImpl<DynamicMapper, Dynamic> impl
      */
     @Override
     public ResponseResult getUserByDynamicId(Integer dynamicId) {
-        // 根据动态ID获取动态信息
+        // 获取动态信息
         Dynamic dynamic = getById(dynamicId);
-        // 根据动态中的用户ID获取用户信息
-        Users user = usersService.getById(dynamic.getUserId());
+
+        // 获取动态中的用户ID
+        Integer userId = dynamic.getUserId();
+
+        // 获取用户信息
+        Users user = usersService.getById(userId);
         UserInfoVo userInfoVo = getUserInfoVo(user);
-        // 返回用户信息响应结果
+
+        // 查询当前用户与该用户是否为好友
+        Integer currentUserId = SecurityUtils.getUserId();
+        boolean isFriend = friendshipService.isFriend(currentUserId, userId);  // 使用你已经实现的 isFriend 方法
+
+        // 设置好友状态
+        userInfoVo.setFriend(isFriend);
+
+        // 返回用户信息和好友状态
         return ResponseResult.okResult(userInfoVo);
     }
+
 
     /**
      * 根据用户ID获取用户信息 用户主页展示用户信息

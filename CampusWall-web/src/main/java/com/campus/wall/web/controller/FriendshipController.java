@@ -29,9 +29,18 @@ public class FriendshipController {
     @PostMapping("/add")
     public ResponseEntity<String> sendFriendRequest(@RequestParam Integer friendId) {
         Integer userId = SecurityUtils.getUserId();
+
+        // 校验是否是自己添加自己为好友
+        if (userId.equals(friendId)) {
+            return ResponseEntity.badRequest().body("不能添加自己为好友");
+        }
+
+        // 调用服务层发送好友请求
         friendshipService.sendFriendRequest(userId, friendId);
+
         return ResponseEntity.ok("好友请求已发送");
     }
+
 
     // 获取好友请求列表
     @GetMapping("/requests")
