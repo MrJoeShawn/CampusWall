@@ -54,7 +54,18 @@ public enum AppHttpCodeEnum {
     // 数据不存在
     DATA_NOT_FOUND(619, "数据不存在"),
     // 用户已存在
-    USER_ALREADY_EXISTS(620, "用户已存在");
+    USER_ALREADY_EXISTS(620, "用户已存在"),
+    // 好友请求已发送
+    FRIEND_REQUEST_SENT(621, "好友请求已发送"),
+    // 好友请求已接受
+    FRIEND_REQUEST_ACCEPTED(622, "好友请求已接受"),
+    // 好友请求已拒绝
+    FRIEND_REQUEST_REJECTED(623, "好友请求已拒绝"),
+    // 好友请求已忽略
+    FRIEND_REQUEST_IGNORED(624, "好友请求已忽略"),
+    // 好友请求已过期
+
+    ;
 
 
     // 状态码

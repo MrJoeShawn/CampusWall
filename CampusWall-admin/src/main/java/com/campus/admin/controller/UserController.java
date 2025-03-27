@@ -49,4 +49,14 @@ public class UserController {
     public ResponseResult updateUser(@RequestBody Users user) {
         return usersService.updateUser(user);
     }
+
+    /**
+     * 获取单个用户信息
+     * @param id 用户ID
+     * @return 用户信息
+     */
+    @GetMapping("/user/{id}")
+    public ResponseResult getUserById(@PathVariable Integer id) {
+        return usersService.getUserById(id);
+    }
 }

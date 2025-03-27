@@ -17,5 +17,7 @@ public interface CommentsService extends IService<Comments> {
     ResponseResult getChildren(Long commentId, Integer pageNum, Integer pageSize);
 
     ResponseResult addComment(Comments comments);
+
+    ResponseResult getAllComments(Integer pageNum, Integer pageSize);
 }
 

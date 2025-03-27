@@ -143,6 +143,30 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comments> i
         return ResponseResult.okResult();
     }
 
+    /**
+     * 查询所有评论列表（分页）
+     * @param pageNum 页码
+     * @param pageSize 每页数量
+     * @return 评论列表
+     */
+    @Override
+    public ResponseResult getAllComments(Integer pageNum, Integer pageSize) {
+        // 创建查询条件（查询所有评论）
+        LambdaQueryWrapper<Comments> wrapper = new LambdaQueryWrapper<>();
+        wrapper.orderByDesc(Comments::getCreatedAt); // 按时间降序排序，最新评论优先
+
+        // 分页查询
+        Page<Comments> page = new Page<>(pageNum, pageSize);
+        page(page, wrapper);
+
+        // 转换为 VO（视图对象）
+        List<CommentVo> commentVoList = toCommentVoList(page.getRecords());
+
+        // 返回分页结果
+        return ResponseResult.okResult(new PageVo(commentVoList, page.getTotal()));
+    }
+
+
 
     /**
      * 将评论列表转换为 CommentVo 列表

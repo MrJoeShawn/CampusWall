@@ -23,5 +23,7 @@ public interface UsersService extends IService<Users> {
     ResponseResult deleteUser(Integer id);
 
     ResponseResult updateUser(Users user);
+
+    ResponseResult getUserById(Integer id);
 }
 

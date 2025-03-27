@@ -192,6 +192,28 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
         }
     }
 
+    /**
+     * 根据用户ID获取用户信息
+     * @param id 用户ID
+     * @return 用户信息
+     */
+    @Override
+    public ResponseResult getUserById(Integer id) {
+        try {
+            // 查询用户信息
+            Users user = usersMapper.selectById(id);
+            if (user == null) {
+                log.warn("用户ID {} 不存在", id);
+                return ResponseResult.errorResult(AppHttpCodeEnum.USER_NOT_FOUND, "用户信息不存在");
+            }
+
+            // 返回用户信息
+            return ResponseResult.okResult(user);
+        } catch (Exception e) {
+            log.error("查询用户信息失败", e);
+            return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR, "查询用户信息失败");
+        }
+    }
 
 
     /**

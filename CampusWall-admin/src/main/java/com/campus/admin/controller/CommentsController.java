@@ -15,18 +15,21 @@ public class CommentsController {
     private CommentsService commentsService;
 
     /**
-     * 获取动态的评论列表
-     * @param dynamicId 动态 ID
+     * 获取所有评论列表（分页）
      * @param pageNum 页码
      * @param pageSize 每页数量
      * @return 评论列表
      */
     @GetMapping("/comment/list")
-    public ResponseResult getCommentsList(@RequestParam Long dynamicId,
-                                          @RequestParam Integer pageNum,
-                                          @RequestParam Integer pageSize) {
-        return commentsService.commentList(dynamicId, pageNum, pageSize);
+    public ResponseResult getAllComments(@RequestParam(defaultValue = "1") Integer pageNum,
+                                         @RequestParam(defaultValue = "10") Integer pageSize) {
+        // 校验分页参数，防止非法访问
+        if (pageNum <= 0 || pageSize <= 0) {
+            return ResponseResult.errorResult(400, "分页参数无效");
+        }
+        return commentsService.getAllComments(pageNum, pageSize);
     }
+
 
     /**
      * 获取评论的子评论列表

@@ -181,9 +181,11 @@ public class DynamicCategoriesServiceImpl extends ServiceImpl<DynamicCategoriesM
         if (isTop == 1) {
             // 查询当前已置顶的公告数量
             int topCount = dynamicMapper.selectCount(new LambdaQueryWrapper<Dynamic>()
-                    .eq(Dynamic::getIsTop, 1));
+                    .eq(Dynamic::getIsTop, 1)
+                    .eq(Dynamic::getDynamicId,21)
+            );
 
-            if (topCount >= 6) {
+            if (topCount >= 7) {
                 return ResponseResult.errorResult(400, "最多只能置顶 6 条公告");
             }
         }

@@ -1,6 +1,8 @@
 package com.campus.wall.web.controller;
 
 import com.campus.framework.dao.entity.Friendship;
+import com.campus.framework.dao.enums.AppHttpCodeEnum;
+import com.campus.framework.dao.repository.ResponseResult;
 import com.campus.framework.dao.vo.UserInfoVo;
 import com.campus.framework.service.FriendshipService;
 import com.campus.framework.untils.SecurityUtils;
@@ -27,18 +29,18 @@ public class FriendshipController {
 
     // 发送好友请求
     @PostMapping("/add")
-    public ResponseEntity<String> sendFriendRequest(@RequestParam Integer friendId) {
+    public ResponseResult sendFriendRequest(@RequestParam Integer friendId) {
         Integer userId = SecurityUtils.getUserId();
 
         // 校验是否是自己添加自己为好友
         if (userId.equals(friendId)) {
-            return ResponseEntity.badRequest().body("不能添加自己为好友");
+            return ResponseResult.errorResult(AppHttpCodeEnum.FRIEND_REQUEST_SENT);
         }
 
         // 调用服务层发送好友请求
         friendshipService.sendFriendRequest(userId, friendId);
 
-        return ResponseEntity.ok("好友请求已发送");
+        return ResponseResult.okResult(AppHttpCodeEnum.FRIEND_REQUEST_SENT);
     }
 
 
@@ -53,10 +55,10 @@ public class FriendshipController {
 
     // 处理好友请求（接受/拒绝）
     @PostMapping("/handleRequest")
-    public ResponseEntity<String> handleFriendRequest(@RequestParam Integer friendId, @RequestParam boolean accept) {
+    public ResponseResult handleFriendRequest(@RequestParam Integer friendId, @RequestParam boolean accept) {
         Integer userId = SecurityUtils.getUserId();
         friendshipService.handleFriendRequest(userId, friendId, accept);
-        return ResponseEntity.ok(accept ? "好友请求已接受" : "好友请求已拒绝");
+        return ResponseResult.okResult(accept ? "好友请求已接受" : "好友请求已拒绝");
     }
 
     // 删除好友
