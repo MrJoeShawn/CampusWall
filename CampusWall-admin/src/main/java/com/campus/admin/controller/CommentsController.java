@@ -69,7 +69,7 @@ public class CommentsController {
     /**
      * 更新评论
      * @param commentId 评论 ID
-     * @param comments 更新的评论内容
+     * @param comments  更新的评论内容
      * @return 操作结果
      */
     @PutMapping("/comment/update/{commentId}")

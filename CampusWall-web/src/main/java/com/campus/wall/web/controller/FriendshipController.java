@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 @RestController
 @RequestMapping("/api/friendship")
 public class FriendshipController {
@@ -43,7 +42,6 @@ public class FriendshipController {
         return ResponseResult.okResult(AppHttpCodeEnum.FRIEND_REQUEST_SENT);
     }
 
-
     // 获取好友请求列表
     @GetMapping("/requests")
     public ResponseEntity<List<UserInfoVo>> getFriendRequests() {
@@ -51,7 +49,6 @@ public class FriendshipController {
         List<UserInfoVo> requests = friendshipService.getPendingFriendRequests(userId);
         return ResponseEntity.ok(requests);
     }
-
 
     // 处理好友请求（接受/拒绝）
     @PostMapping("/handleRequest")
@@ -69,4 +66,3 @@ public class FriendshipController {
         return ResponseEntity.ok("好友已删除");
     }
 }
-

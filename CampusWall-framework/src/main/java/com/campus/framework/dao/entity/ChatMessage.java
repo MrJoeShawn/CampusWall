@@ -28,7 +28,7 @@ public class ChatMessage  {
     private String conversationId;
     //发送者ID    
     private Integer senderId;
-    //接收者ID    
+    //接收者ID
     private Long receiverId;
     //消息类型    
     private String messageType;

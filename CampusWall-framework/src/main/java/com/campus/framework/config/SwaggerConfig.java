@@ -24,12 +24,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @author MrJoe
  * @date 2022-6-27 23:43:39
  */
-// 启用Knife4j增强Swagger功能
-// 配置类的声明
-// 启用Swagger2
-// 导入BeanValidator插件配置
-// 解决Swagger 3.X以下版本的兼容性问题，但会导致3.X及以上版本页面无法打开
-//@EnableWebMvc
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {

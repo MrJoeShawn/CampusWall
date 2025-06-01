@@ -144,8 +144,6 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
         return result;
     }
-
-
 }
 
 

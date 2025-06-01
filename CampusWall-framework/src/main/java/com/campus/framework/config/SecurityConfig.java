@@ -61,7 +61,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 配置 session 策略为无状态 (STATELESS)，因为我们使用 JWT 实现身份验证，而不使用 session 存储用户信息
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-
                 // 配置 URL 权限控制
                 .authorizeRequests()
                 // 允许访问以下路径，无需认证
