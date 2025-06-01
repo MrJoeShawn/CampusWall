@@ -99,13 +99,3 @@ campus-wall/
    ```bash
    java -jar CampusWall-web/target/CampusWall-web.jar
    ```
-
----
-
-## 📄 许可证
-
-本项目遵循 MIT 许可证，详情见 [LICENSE](LICENSE) 文件。
-
----
-
-你可以根据自己的实际情况补充或删减，比如添加前端说明、部署细节、贡献指南等。如果你需要，我可以帮你写这些内容。需要的话告诉我！
