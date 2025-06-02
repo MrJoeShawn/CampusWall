@@ -58,20 +58,24 @@ campus-wall/
 └── pom.xml                  # Maven 项目配置
 ```
 
-## 🎉 项目前端
+## 🎉 项目前端页面
 
 
 首页
+
 ![1](https://github.com/user-attachments/assets/67dcc934-06b8-4076-abe6-f896e2f0fe2b)
 
 ---
 动态详情页
+
 ![4](https://github.com/user-attachments/assets/8ae9652b-1807-46f4-b8e6-79783a2e9b9b)
 
 ---
 我的动态
+
 ![2](https://github.com/user-attachments/assets/6616feb9-385a-479d-a7f3-06a20ab1fc8f)
 
 ---
 聊天页
+
 ![3](https://github.com/user-attachments/assets/ebd34a84-9bf6-45b5-9526-442921920a91)
