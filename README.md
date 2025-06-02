@@ -2,7 +2,7 @@
 # 🎓 CampusWall - 校园社交平台
 
 CampusWall 是一款基于 Spring Boot 的校园社交平台，专为高校学生设计，支持动态发布、评论点赞、好友互动和一对一实时聊天，打造一个轻量级且高效的校园社交环境。
-
+![1](https://github.com/user-attachments/assets/4ec1f383-2f78-41b0-9399-fd6a0a8f18ab)
 ---
 
 ## 🧩 项目简介
