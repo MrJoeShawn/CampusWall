@@ -61,18 +61,10 @@ campus-wall/
 ## 🎉 项目前端
 
 ```
-首页
-![1](https://github.com/user-attachments/assets/415d43a1-c15a-4b42-8c39-c53ad4655704)
-
-```
 我的动态
 
 ![2](https://github.com/user-attachments/assets/6616feb9-385a-479d-a7f3-06a20ab1fc8f)
 
-```
-动态详情
-
-![4](https://github.com/user-attachments/assets/4a5ca32e-69a3-425d-b6ba-13d89c51387b)
 
 ```
 聊天界面
