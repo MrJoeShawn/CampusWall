@@ -4,5 +4,5 @@ CampusWall-项目测试用例设计
 
 **技术栈：**Spring Boot、Spring Security、Vue、MyBatis、MySQL、JWT、WebSocket。
 
-![CampusWall](F:%5C%E7%AC%94%E8%AE%B0%5C%E7%AC%94%E8%AE%B0%E5%9B%BE%E7%89%87%5CCampusWall.png)
 
+![CampusWall](https://github.com/user-attachments/assets/29dd491d-1abf-4337-96d1-c6ab548695bf)
